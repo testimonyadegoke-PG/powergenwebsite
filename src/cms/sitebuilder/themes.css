@@ -1,0 +1,1532 @@
+/* ═════════════════════════════════════════════════════════════════
+   POWERGEN TEMPLATE LIBRARY — THE 10 ARTISTIC THEMES
+   ═════════════════════════════════════════════════════════════════ */
+
+/* =================================================================
+   1. neo-industrial brutalist theme (.theme-brutalist)
+   ================================================================= */
+.theme-brutalist {
+  --bg-white: #ffffff;
+  --bg-light: #f3f4f6;
+  --primary-dark: #000000;
+  --text-main: #000000;
+  --text-muted: #2d3748;
+  --border-color: #000000;
+  --accent-green: #e2f952; /* Stark lime yellow */
+  --font-heading: 'Outfit', 'Courier New', monospace;
+  --font-body: 'Courier New', monospace;
+}
+
+.theme-brutalist .home-hero,
+.theme-brutalist .evidence-section,
+.theme-brutalist .passion-section,
+.theme-brutalist .systems-section,
+.theme-brutalist .map-section,
+.theme-brutalist .impact-band,
+.theme-brutalist .cta-banner {
+  background: var(--bg-white) !important;
+  color: #000000 !important;
+  border-bottom: 4px solid #000000 !important;
+  padding: 5rem 1.5rem !important;
+}
+
+/* Brutalist borders and layout */
+.theme-brutalist h1, 
+.theme-brutalist h2, 
+.theme-brutalist h3 {
+  font-family: var(--font-heading) !important;
+  font-weight: 900 !important;
+  text-transform: uppercase;
+  color: #000000 !important;
+  letter-spacing: -1px;
+}
+
+.theme-brutalist .home-hero h1 {
+  font-size: clamp(2.5rem, 6.5vw, 5.5rem) !important;
+  line-height: 0.9 !important;
+  border: 3px solid #000 !important;
+  padding: 1.5rem !important;
+  background: var(--accent-green) !important;
+  box-shadow: 6px 6px 0px #000 !important;
+  transform: rotate(-1deg);
+}
+
+.theme-brutalist .signal-panel {
+  background: #ffffff !important;
+  border: 3px solid #000000 !important;
+  box-shadow: 8px 8px 0px #000000 !important;
+  border-radius: 0 !important;
+  color: #000000 !important;
+  transform: rotate(1.5deg);
+  opacity: 1 !important;
+}
+
+.theme-brutalist .brutalist-corner-cross {
+  position: absolute;
+  top: -15px;
+  right: -15px;
+  background: #000;
+  color: #fff;
+  font-family: monospace;
+  font-weight: bold;
+  padding: 2px 8px;
+  font-size: 1.1rem;
+}
+
+.theme-brutalist .btn-primary,
+.theme-brutalist .btn-secondary,
+.theme-brutalist .btn-outline-white {
+  background: var(--accent-green) !important;
+  color: #000000 !important;
+  border: 3px solid #000000 !important;
+  border-radius: 0 !important;
+  font-weight: 900 !important;
+  text-transform: uppercase;
+  box-shadow: 4px 4px 0px #000000 !important;
+  transition: transform 0.1s, box-shadow 0.1s !important;
+}
+
+.theme-brutalist .btn-primary:hover,
+.theme-brutalist .btn-secondary:hover {
+  transform: translate(2px, 2px) !important;
+  box-shadow: 2px 2px 0px #000000 !important;
+}
+
+/* System cards and panels */
+.theme-brutalist .system-panel,
+.theme-brutalist .impact-tile,
+.theme-brutalist .news-card,
+.theme-brutalist .project-card,
+.theme-brutalist .job-card,
+.theme-brutalist .contact-form-card {
+  background: #ffffff !important;
+  border: 3px solid #000000 !important;
+  box-shadow: 6px 6px 0px #000000 !important;
+  border-radius: 0 !important;
+  transition: transform 0.15s, box-shadow 0.15s !important;
+}
+
+.theme-brutalist .system-panel:hover,
+.theme-brutalist .impact-tile:hover,
+.theme-brutalist .news-card:hover {
+  transform: translate(-2px, -2px) !important;
+  box-shadow: 8px 8px 0px #000000 !important;
+}
+
+.theme-brutalist .kicker,
+.theme-brutalist .tag {
+  background: #000000 !important;
+  color: #ffffff !important;
+  padding: 0.2rem 0.6rem !important;
+  font-size: 0.8rem !important;
+  font-weight: bold !important;
+  display: inline-block !important;
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+  border-radius: 0 !important;
+}
+
+
+/* =================================================================
+   2. cyberpunk grid theme (.theme-cyberpunk)
+   ================================================================= */
+.theme-cyberpunk {
+  --bg-white: #0a0e14;
+  --bg-light: #06090d;
+  --primary-dark: #020508;
+  --text-main: #00ff66; /* Terminal green */
+  --text-muted: #00b3ff; /* Electric cyan */
+  --border-color: #00ff66;
+  --accent-green: #00ff66;
+  --font-heading: 'Courier New', monospace;
+  --font-body: 'Courier New', monospace;
+}
+
+.theme-cyberpunk {
+  background: #06090d !important;
+  color: #00ff66 !important;
+}
+
+.theme-cyberpunk .home-hero,
+.theme-cyberpunk .evidence-section,
+.theme-cyberpunk .passion-section,
+.theme-cyberpunk .systems-section,
+.theme-cyberpunk .map-section,
+.theme-cyberpunk .impact-band,
+.theme-cyberpunk .cta-banner {
+  background: #06090d !important;
+  color: #00ff66 !important;
+  border: 1px solid rgba(0, 255, 102, 0.2) !important;
+  margin: 1.5rem !important;
+  border-radius: 4px !important;
+  padding: 4rem 2rem !important;
+  box-shadow: 0 0 15px rgba(0, 255, 102, 0.05) !important;
+}
+
+/* Glitch Overlay */
+.theme-cyberpunk .cyber-glitch-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+  background-size: 100% 4px, 6px 100%;
+  pointer-events: none;
+  z-index: 10;
+  opacity: 0.15;
+}
+
+/* Terminal top bar */
+.theme-cyberpunk .terminal-header-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0, 255, 102, 0.1);
+  padding: 6px 12px;
+  border-bottom: 1px solid rgba(0, 255, 102, 0.3);
+  font-size: 0.75rem;
+  color: #00ff66;
+  margin: -1.5rem -1.5rem 1.5rem -1.5rem;
+}
+
+.theme-cyberpunk .terminal-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #333;
+}
+.theme-cyberpunk .terminal-dot.red { background-color: #ff5f56; }
+.theme-cyberpunk .terminal-dot.yellow { background-color: #ffbd2e; }
+.theme-cyberpunk .terminal-dot.green { background-color: #27c93f; }
+.theme-cyberpunk .terminal-title {
+  margin-left: auto;
+  opacity: 0.8;
+}
+
+.theme-cyberpunk h1, 
+.theme-cyberpunk h2, 
+.theme-cyberpunk h3,
+.theme-cyberpunk h4 {
+  font-family: var(--font-heading) !important;
+  color: #00f3ff !important; /* Cyan title text */
+  text-shadow: 0 0 8px rgba(0, 243, 255, 0.4) !important;
+  text-transform: uppercase;
+}
+
+.theme-cyberpunk h1 {
+  font-size: clamp(2rem, 6vw, 4.5rem) !important;
+}
+
+.theme-cyberpunk .btn-primary,
+.theme-cyberpunk .btn-secondary,
+.theme-cyberpunk .btn-outline-white {
+  background: transparent !important;
+  color: #00ff66 !important;
+  border: 1px solid #00ff66 !important;
+  box-shadow: 0 0 10px rgba(0, 255, 102, 0.2) !important;
+  text-shadow: 0 0 5px rgba(0, 255, 102, 0.5) !important;
+  border-radius: 2px !important;
+  text-transform: uppercase;
+  font-weight: bold !important;
+  transition: all 0.2s ease !important;
+}
+
+.theme-cyberpunk .btn-primary:hover,
+.theme-cyberpunk .btn-secondary:hover {
+  background: #00ff66 !important;
+  color: #000000 !important;
+  box-shadow: 0 0 20px rgba(0, 255, 102, 0.6) !important;
+  text-shadow: none !important;
+}
+
+/* Cyber containers */
+.theme-cyberpunk .signal-panel,
+.theme-cyberpunk .system-panel,
+.theme-cyberpunk .impact-tile,
+.theme-cyberpunk .news-card,
+.theme-cyberpunk .project-card,
+.theme-cyberpunk .job-card,
+.theme-cyberpunk .contact-form-card {
+  background: rgba(10, 14, 20, 0.9) !important;
+  border: 1px solid rgba(0, 255, 102, 0.3) !important;
+  box-shadow: 0 0 10px rgba(0, 255, 102, 0.05) !important;
+  border-radius: 4px !important;
+  color: #00ff66 !important;
+}
+
+.theme-cyberpunk .system-panel:hover,
+.theme-cyberpunk .news-card:hover {
+  border-color: #00f3ff !important;
+  box-shadow: 0 0 15px rgba(0, 243, 255, 0.3) !important;
+}
+
+.theme-cyberpunk .animated-counter {
+  color: #00f3ff !important;
+  text-shadow: 0 0 10px rgba(0, 243, 255, 0.6) !important;
+}
+
+
+/* =================================================================
+   3. glassmorphic aurora theme (.theme-glassmorphic)
+   ================================================================= */
+.theme-glassmorphic {
+  --bg-white: rgba(255, 255, 255, 0.08);
+  --bg-light: rgba(255, 255, 255, 0.03);
+  --primary-dark: #0f172a;
+  --text-main: #f8fafc;
+  --text-muted: #cbd5e1;
+  --border-color: rgba(255, 255, 255, 0.15);
+  --accent-green: #34d399;
+  --font-heading: 'Outfit', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+.theme-glassmorphic {
+  background: #0b0f19 !important;
+  color: #f8fafc !important;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Aurora background styling */
+.theme-glassmorphic .glass-aurora-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.theme-glassmorphic .aurora-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.15;
+  animation: float-blob 20s infinite alternate;
+}
+
+.theme-glassmorphic .blob-1 {
+  background: linear-gradient(135deg, #3b82f6, #06b6d4);
+  width: 400px;
+  height: 400px;
+  top: -100px;
+  right: -50px;
+}
+
+.theme-glassmorphic .blob-2 {
+  background: linear-gradient(135deg, #10b981, #6366f1);
+  width: 500px;
+  height: 500px;
+  bottom: -150px;
+  left: -100px;
+  animation-delay: -10s;
+}
+
+@keyframes float-blob {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(50px, 40px) scale(1.1); }
+  100% { transform: translate(-30px, -20px) scale(0.95); }
+}
+
+.theme-glassmorphic .home-hero,
+.theme-glassmorphic .evidence-section,
+.theme-glassmorphic .passion-section,
+.theme-glassmorphic .systems-section,
+.theme-glassmorphic .map-section,
+.theme-glassmorphic .impact-band,
+.theme-glassmorphic .cta-banner {
+  background: rgba(11, 15, 25, 0.6) !important;
+  backdrop-filter: blur(10px) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+  padding: 6rem 1.5rem !important;
+}
+
+/* Glassmorphic panels */
+.theme-glassmorphic .signal-panel,
+.theme-glassmorphic .system-panel,
+.theme-glassmorphic .impact-tile,
+.theme-glassmorphic .news-card,
+.theme-glassmorphic .project-card,
+.theme-glassmorphic .job-card,
+.theme-glassmorphic .contact-form-card {
+  background: rgba(255, 255, 255, 0.04) !important;
+  backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3) !important;
+  color: #f8fafc !important;
+  transition: border-color 0.3s ease, transform 0.3s ease !important;
+}
+
+.theme-glassmorphic .system-panel:hover,
+.theme-glassmorphic .news-card:hover,
+.theme-glassmorphic .project-card:hover {
+  border-color: rgba(255, 255, 255, 0.25) !important;
+  transform: translateY(-5px) !important;
+}
+
+.theme-glassmorphic .btn-primary {
+  background: linear-gradient(135deg, rgba(52, 211, 153, 0.8), rgba(16, 185, 129, 0.8)) !important;
+  backdrop-filter: blur(4px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  color: #fff !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2) !important;
+}
+
+.theme-glassmorphic .btn-outline-white {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 8px !important;
+  backdrop-filter: blur(4px) !important;
+}
+
+
+/* =================================================================
+   4. editorial chronicle theme (.theme-editorial)
+   ================================================================= */
+.theme-editorial {
+  --bg-white: #faf9f6; /* Ivory paper */
+  --bg-light: #f5f4ef;
+  --primary-dark: #111111;
+  --text-main: #222222;
+  --text-muted: #555555;
+  --border-color: #111111;
+  --accent-green: #37523c; /* Forest green */
+  --font-heading: 'Georgia', 'Playfair Display', serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+.theme-editorial {
+  background: #faf9f6 !important;
+  color: #222222 !important;
+  font-family: var(--font-body);
+}
+
+.theme-editorial .home-hero,
+.theme-editorial .evidence-section,
+.theme-editorial .passion-section,
+.theme-editorial .systems-section,
+.theme-editorial .map-section,
+.theme-editorial .impact-band,
+.theme-editorial .cta-banner {
+  background: #faf9f6 !important;
+  color: #222222 !important;
+  border-bottom: 1px solid #111111 !important;
+  padding: 6rem 1.5rem !important;
+}
+
+.theme-editorial h1, 
+.theme-editorial h2, 
+.theme-editorial h3,
+.theme-editorial h4 {
+  font-family: var(--font-heading) !important;
+  font-weight: normal !important;
+  color: #111111 !important;
+}
+
+.theme-editorial h1 {
+  font-size: clamp(2.5rem, 6vw, 4.8rem) !important;
+  line-height: 1.05 !important;
+  font-style: italic;
+  letter-spacing: -0.5px;
+}
+
+/* Simple clean divider lines */
+.theme-editorial .signal-panel,
+.theme-editorial .system-panel,
+.theme-editorial .news-card,
+.theme-editorial .project-card,
+.theme-editorial .job-card,
+.theme-editorial .contact-form-card {
+  background: transparent !important;
+  border: none !important;
+  border-top: 1px solid #111111 !important;
+  border-bottom: 1px solid #111111 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 2rem 0 !important;
+}
+
+.theme-editorial .impact-tile {
+  background: transparent !important;
+  border: none !important;
+  border-left: 1px solid rgba(17, 17, 17, 0.2) !important;
+  border-radius: 0 !important;
+  padding-left: 1.5rem !important;
+}
+
+.theme-editorial .btn-primary {
+  background: #111111 !important;
+  color: #ffffff !important;
+  border-radius: 0 !important;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+}
+
+.theme-editorial .btn-outline-white {
+  border: 1px solid #111111 !important;
+  color: #111111 !important;
+  border-radius: 0 !important;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+}
+
+
+/* =================================================================
+   5. minimalist zero gravity theme (.theme-minimalist)
+   ================================================================= */
+.theme-minimalist {
+  --bg-white: #ffffff;
+  --bg-light: #fafafa;
+  --primary-dark: #171717;
+  --text-main: #171717;
+  --text-muted: #737373;
+  --border-color: #e5e5e5;
+  --accent-green: #10b981;
+  --font-heading: 'Inter', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+.theme-minimalist {
+  background: #ffffff !important;
+  color: #171717 !important;
+}
+
+.theme-minimalist .home-hero,
+.theme-minimalist .evidence-section,
+.theme-minimalist .passion-section,
+.theme-minimalist .systems-section,
+.theme-minimalist .map-section,
+.theme-minimalist .impact-band,
+.theme-minimalist .cta-banner {
+  background: #ffffff !important;
+  color: #171717 !important;
+  border-bottom: 1px solid #f0f0f0 !important;
+  padding: 7rem 1.5rem !important;
+}
+
+.theme-minimalist h1, 
+.theme-minimalist h2, 
+.theme-minimalist h3 {
+  font-family: var(--font-heading) !important;
+  font-weight: 300 !important; /* Ultra thin font */
+  letter-spacing: -2px;
+}
+
+.theme-minimalist .btn-primary {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border-radius: 4px !important;
+  font-size: 0.85rem;
+  font-weight: 500 !important;
+  padding: 0.6rem 1.2rem !important;
+}
+
+.theme-minimalist .btn-outline-white {
+  border: 1px solid #e5e5e5 !important;
+  color: #171717 !important;
+  border-radius: 4px !important;
+  font-size: 0.85rem;
+  font-weight: 500 !important;
+  padding: 0.6rem 1.2rem !important;
+}
+
+/* Minimalist spacing elements */
+.theme-minimalist .signal-panel,
+.theme-minimalist .system-panel,
+.theme-minimalist .impact-tile,
+.theme-minimalist .news-card,
+.theme-minimalist .project-card,
+.theme-minimalist .job-card,
+.theme-minimalist .contact-form-card {
+  background: #ffffff !important;
+  border: 1px solid #f0f0f0 !important;
+  border-radius: 4px !important;
+  box-shadow: none !important;
+}
+
+
+/* =================================================================
+   6. retro future earth theme (.theme-retro)
+   ================================================================= */
+.theme-retro {
+  --bg-white: #fdfbf7;
+  --bg-light: #f6f3eb;
+  --primary-dark: #372a20;
+  --text-main: #372a20; /* Warm brown */
+  --text-muted: #7d6e63;
+  --border-color: #372a20;
+  --accent-green: #df7b3e; /* Teracotta orange */
+  --font-heading: 'Outfit', Georgia, serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+.theme-retro {
+  background: #fdfbf7 !important;
+  color: #372a20 !important;
+}
+
+.theme-retro .home-hero,
+.theme-retro .evidence-section,
+.theme-retro .passion-section,
+.theme-retro .systems-section,
+.theme-retro .map-section,
+.theme-retro .impact-band,
+.theme-retro .cta-banner {
+  background: #fdfbf7 !important;
+  color: #372a20 !important;
+  border-bottom: 2px dashed #372a20 !important;
+  padding: 5rem 1.5rem !important;
+}
+
+.theme-retro h1, 
+.theme-retro h2, 
+.theme-retro h3 {
+  font-family: var(--font-heading) !important;
+  font-weight: 800 !important;
+  color: #372a20 !important;
+}
+
+.theme-retro img {
+  filter: sepia(0.35) contrast(0.95) !important;
+}
+
+/* Card deck lines */
+.theme-retro .signal-panel,
+.theme-retro .system-panel,
+.theme-retro .impact-tile,
+.theme-retro .news-card,
+.theme-retro .project-card,
+.theme-retro .job-card,
+.theme-retro .contact-form-card {
+  background: #f6f3eb !important;
+  border: 2px solid #372a20 !important;
+  border-radius: 12px !important;
+  box-shadow: 4px 4px 0px #372a20 !important;
+}
+
+.theme-retro .btn-primary {
+  background: #df7b3e !important;
+  color: #ffffff !important;
+  border: 2px solid #372a20 !important;
+  border-radius: 12px !important;
+  box-shadow: 3px 3px 0px #372a20 !important;
+}
+
+
+/* =================================================================
+   7. kinetic velocity theme (.theme-kinetic)
+   ================================================================= */
+.theme-kinetic {
+  --bg-white: #ffffff;
+  --bg-light: #f8fafc;
+  --primary-dark: #020617;
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  --border-color: #cbd5e1;
+  --accent-green: #10b981;
+  --font-heading: 'Outfit', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+/* Angle cuts */
+.theme-kinetic .home-hero {
+  clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%) !important;
+}
+
+.theme-kinetic .cta-banner {
+  clip-path: polygon(0 10%, 100% 0, 100% 100%, 0 90%) !important;
+}
+
+.theme-kinetic .system-panel {
+  transform: skewX(-2deg);
+}
+
+.theme-kinetic .btn-primary {
+  background: linear-gradient(90deg, #10b981 0%, #059669 100%) !important;
+  color: #ffffff !important;
+  border-radius: 30px !important;
+  transform: skewX(-6deg);
+}
+
+
+/* =================================================================
+   8. organic bloom theme (.theme-organic)
+   ================================================================= */
+.theme-organic {
+  --bg-white: #fcfdfa;
+  --bg-light: #f3f7ef;
+  --primary-dark: #1b3b22; /* Forest green */
+  --text-main: #1b3b22;
+  --text-muted: #53755c;
+  --border-color: #cbd8ce;
+  --accent-green: #5ca669;
+  --font-heading: 'Outfit', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+.theme-organic {
+  background: #fcfdfa !important;
+  color: #1b3b22 !important;
+}
+
+/* Soft leaf curves */
+.theme-organic .signal-panel,
+.theme-organic .system-panel,
+.theme-organic .news-card,
+.theme-organic .project-card,
+.theme-organic .contact-form-card {
+  border-radius: 30px 4px 30px 4px !important;
+  border: 1px solid #cbd8ce !important;
+  background: #f3f7ef !important;
+}
+
+.theme-organic .btn-primary {
+  background: #1b3b22 !important;
+  color: #ffffff !important;
+  border-radius: 20px 4px 20px 4px !important;
+}
+
+
+/* =================================================================
+   9. liquid stream theme (.theme-liquid)
+   ================================================================= */
+.theme-liquid {
+  --bg-white: #ffffff;
+  --bg-light: #f0f7ff;
+  --primary-dark: #002d62;
+  --text-main: #002d62;
+  --text-muted: #4b6f96;
+  --border-color: #bcd4ef;
+  --accent-green: #00d2ff; /* Water turquoise */
+  --font-heading: 'Outfit', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+.theme-liquid .system-panel,
+.theme-liquid .news-card,
+.theme-liquid .project-card,
+.theme-liquid .contact-form-card {
+  border-radius: 24px !important;
+  background: linear-gradient(135deg, #ffffff 0%, #f0f7ff 100%) !important;
+  border: 1px solid #bcd4ef !important;
+}
+
+.theme-liquid .btn-primary {
+  background: linear-gradient(135deg, #002d62 0%, #0076a3 100%) !important;
+  border-radius: 24px !important;
+  color: #ffffff !important;
+}
+
+
+/* =================================================================
+   10. monochrome blueprint theme (.theme-blueprint)
+   ================================================================= */
+.theme-blueprint {
+  --bg-white: #0a359c; /* Blueprint blue */
+  --bg-light: #062a7d;
+  --primary-dark: #031b53;
+  --text-main: #ffffff;
+  --text-muted: rgba(255, 255, 255, 0.7);
+  --border-color: rgba(255, 255, 255, 0.4);
+  --accent-green: #ffffff;
+  --font-heading: 'Courier New', monospace;
+  --font-body: 'Courier New', monospace;
+}
+
+.theme-blueprint {
+  background: #0a359c !important;
+  color: #ffffff !important;
+}
+
+.theme-blueprint .home-hero,
+.theme-blueprint .evidence-section,
+.theme-blueprint .passion-section,
+.theme-blueprint .systems-section,
+.theme-blueprint .map-section,
+.theme-blueprint .impact-band,
+.theme-blueprint .cta-banner {
+  background: #0a359c !important;
+  color: #ffffff !important;
+  border: 1px dashed rgba(255, 255, 255, 0.25) !important;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px) !important;
+  background-size: 20px 20px, 20px 20px !important;
+  padding: 5rem 1.5rem !important;
+  margin: 1rem !important;
+}
+
+.theme-blueprint h1, 
+.theme-blueprint h2, 
+.theme-blueprint h3,
+.theme-blueprint h4 {
+  font-family: var(--font-heading) !important;
+  color: #ffffff !important;
+  text-transform: uppercase;
+}
+
+.theme-blueprint .signal-panel,
+.theme-blueprint .system-panel,
+.theme-blueprint .impact-tile,
+.theme-blueprint .news-card,
+.theme-blueprint .project-card,
+.theme-blueprint .job-card,
+.theme-blueprint .contact-form-card {
+  background: rgba(10, 53, 156, 0.8) !important;
+  border: 1px solid rgba(255, 255, 255, 0.5) !important;
+  border-style: dashed !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  color: #ffffff !important;
+}
+
+.theme-blueprint .btn-primary {
+  background: transparent !important;
+  color: #ffffff !important;
+  border: 1px solid #ffffff !important;
+  border-radius: 0 !important;
+  text-transform: uppercase;
+}
+
+.theme-blueprint .btn-primary:hover {
+  background: #ffffff !important;
+  color: #0a359c !important;
+}
+
+
+/* =================================================================
+   RESPONSIVE SIMULATOR ADJUSTMENTS FOR MOBILE/TABLET VIEWER CANVAS
+   ================================================================= */
+.builder-canvas-tablet.theme-brutalist,
+.builder-canvas-mobile.theme-brutalist {
+  padding: 0 !important;
+}
+
+.builder-canvas-tablet.theme-cyberpunk,
+.builder-canvas-mobile.theme-cyberpunk {
+  margin: 0 !important;
+}
+
+.builder-canvas-mobile.theme-brutalist .home-hero h1 {
+  transform: none !important;
+  font-size: 1.8rem !important;
+}
+
+.builder-canvas-mobile.theme-cyberpunk .terminal-header-bar {
+  margin: -1rem -1rem 1rem -1rem !important;
+}
+
+
+/* =================================================================
+   11. Daystar Power Inspired Theme (.theme-swiss)
+   ================================================================= */
+.theme-swiss {
+  --bg-white: #ffffff;
+  --bg-light: #fbfbfb;
+  --primary-dark: #111111;
+  --text-main: #18181b;
+  --text-muted: #52525b;
+  --border-color: #e4e4e7;
+  --accent-green: #eab308; /* Daystar Gold-Orange */
+  --font-heading: 'Outfit', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+.theme-swiss {
+  background: #ffffff !important;
+  color: #18181b !important;
+}
+
+.theme-swiss .header {
+  background: #ffffffeb !important;
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid #f0f0f0 !important;
+  transition: all 0.3s ease !important;
+}
+
+.theme-swiss .header .nav-link {
+  color: #18181b !important;
+  font-family: var(--font-heading) !important;
+  font-weight: 600 !important;
+  font-size: 0.9rem !important;
+  letter-spacing: 0.02em !important;
+}
+
+.theme-swiss .header .nav-link:hover,
+.theme-swiss .header .nav-link.active {
+  color: var(--accent-green) !important;
+}
+
+.theme-swiss .header .btn-primary {
+  background: var(--accent-green) !important;
+  color: #ffffff !important;
+  border-radius: 4px !important;
+  border: none !important;
+  font-weight: 700 !important;
+}
+
+.theme-swiss .footer {
+  background: #18181b !important;
+  color: #e4e4e7 !important;
+  border-top: 4px solid var(--accent-green) !important;
+}
+
+.theme-swiss .footer h4 {
+  font-family: var(--font-heading) !important;
+  color: #ffffff !important;
+}
+
+.theme-swiss .footer-links a:hover {
+  color: var(--accent-green) !important;
+}
+
+/* Daystar Handwriting Accent Eyebrow */
+.theme-swiss .kicker,
+.theme-swiss span.kicker {
+  font-family: 'Pinyon Script', cursive !important;
+  font-size: 1.8rem !important;
+  color: #d97706 !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  font-weight: 400 !important;
+  margin-bottom: 0.5rem !important;
+  display: inline-block;
+  background: transparent !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+}
+
+.theme-swiss h1,
+.theme-swiss h2,
+.theme-swiss h3 {
+  font-family: var(--font-heading) !important;
+  font-weight: 800 !important;
+  color: #111111 !important;
+  letter-spacing: -0.03em !important;
+}
+
+.theme-swiss .home-hero h1 {
+  font-size: clamp(2.5rem, 6vw, 4.5rem) !important;
+  line-height: 1.05 !important;
+}
+
+.theme-swiss .btn-primary {
+  background: var(--accent-green) !important;
+  color: #ffffff !important;
+  border: none !important;
+  font-weight: 700 !important;
+  border-radius: 4px !important;
+  box-shadow: 0 4px 14px rgba(234, 179, 8, 0.3) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.theme-swiss .btn-primary:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(234, 179, 8, 0.45) !important;
+}
+
+.theme-swiss .btn-secondary,
+.theme-swiss .btn-outline-white {
+  background: #18181b !important;
+  color: #ffffff !important;
+  border: 1px solid #18181b !important;
+  border-radius: 4px !important;
+  font-weight: 700 !important;
+}
+
+.theme-swiss .btn-secondary:hover {
+  background: #27272a !important;
+}
+
+.theme-swiss .system-panel,
+.theme-swiss .news-card,
+.theme-swiss .project-card,
+.theme-swiss .contact-form-card {
+  background: #ffffff !important;
+  border: 1px solid #e4e4e7 !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04) !important;
+  border-radius: 8px !important;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.theme-swiss .system-panel:hover,
+.theme-swiss .news-card:hover {
+  transform: translateY(-6px) !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08) !important;
+  border-color: rgba(234, 179, 8, 0.3) !important;
+}
+
+
+/* =================================================================
+   12. Cross Boundary Inspired Theme (.theme-bauhaus)
+   ================================================================= */
+.theme-bauhaus {
+  --bg-white: #ffffff;
+  --bg-light: #f0fdfa;
+  --primary-dark: #0f172a;
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  --border-color: #cbd5e1;
+  --accent-green: #0d9488; /* Corporate Teal */
+  --font-heading: 'Outfit', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+}
+
+.theme-bauhaus {
+  background: #ffffff !important;
+  color: #0f172a !important;
+}
+
+.theme-bauhaus .header {
+  background: #0f172aec !important;
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.theme-bauhaus .header .nav-link {
+  color: #ffffff !important;
+  font-family: var(--font-heading) !important;
+  font-weight: 500 !important;
+}
+
+.theme-bauhaus .header .nav-link:hover,
+.theme-bauhaus .header .nav-link.active {
+  color: var(--accent-green) !important;
+}
+
+.theme-bauhaus .header .btn-primary {
+  background: var(--accent-green) !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 0 !important;
+  font-weight: 600 !important;
+}
+
+.theme-bauhaus .footer {
+  background: #0f172a !important;
+  color: #cbd5e1 !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.theme-bauhaus .footer h4 {
+  font-family: var(--font-heading) !important;
+  color: #ffffff !important;
+  border-bottom: 2px solid var(--accent-green) !important;
+  padding-bottom: 0.5rem !important;
+  display: inline-block !important;
+  margin-bottom: 1.5rem !important;
+}
+
+.theme-bauhaus .footer-links a:hover {
+  color: var(--accent-green) !important;
+}
+
+.theme-bauhaus h1,
+.theme-bauhaus h2,
+.theme-bauhaus h3 {
+  font-family: var(--font-heading) !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+  letter-spacing: -0.02em !important;
+  text-transform: none !important;
+}
+
+.theme-bauhaus .home-hero h1 {
+  font-size: clamp(2.4rem, 5.5vw, 4.2rem) !important;
+  line-height: 1.1 !important;
+}
+
+.theme-bauhaus .btn-primary {
+  background: var(--accent-green) !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 0 !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  padding: 0.9rem 2rem !important;
+  box-shadow: none !important;
+  transition: background-color 0.2s ease !important;
+}
+
+.theme-bauhaus .btn-primary:hover {
+  background: #0f766e !important;
+}
+
+.theme-bauhaus .btn-secondary,
+.theme-bauhaus .btn-outline-white {
+  background: transparent !important;
+  color: #ffffff !important;
+  border: 2px solid #ffffff !important;
+  border-radius: 0 !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+}
+
+.theme-bauhaus .btn-secondary:hover {
+  background: #ffffff !important;
+  color: #0f172a !important;
+}
+
+.theme-bauhaus .kicker,
+.theme-bauhaus span.kicker {
+  color: var(--accent-green) !important;
+  font-family: var(--font-heading) !important;
+  font-weight: 700 !important;
+  font-size: 0.78rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.15em !important;
+  margin-bottom: 0.6rem !important;
+  display: inline-block !important;
+  background: transparent !important;
+  padding: 0 !important;
+}
+
+.theme-bauhaus .system-panel,
+.theme-bauhaus .news-card,
+.theme-bauhaus .project-card,
+.theme-bauhaus .contact-form-card {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.theme-bauhaus .system-panel:hover,
+.theme-bauhaus .news-card:hover {
+  border-color: var(--accent-green) !important;
+  box-shadow: 0 10px 20px rgba(13, 148, 136, 0.08) !important;
+}
+
+
+/* =================================================================
+   13. Neumorphic Soft-UI Theme (.theme-neumorph)
+   ================================================================= */
+.theme-neumorph {
+  --bg-white: #e6e9f0;
+  --bg-light: #e6e9f0;
+  --primary-dark: #3b3f4a;
+  --text-main: #3b3f4a;
+  --text-muted: #6b7280;
+  --border-color: #e6e9f0;
+  --accent-green: #6d28d9;
+  --font-heading: 'Outfit', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+}
+
+.theme-neumorph {
+  background: #e6e9f0 !important;
+  color: #3b3f4a !important;
+}
+
+.theme-neumorph .header {
+  background: #e6e9f0eb !important;
+  backdrop-filter: blur(10px);
+  border-bottom: none !important;
+  box-shadow: 0 4px 20px rgba(196, 201, 212, 0.4) !important;
+}
+
+.theme-neumorph .header .nav-link {
+  color: #3b3f4a !important;
+  font-weight: 600 !important;
+}
+
+.theme-neumorph .header .nav-link:hover,
+.theme-neumorph .header .nav-link.active {
+  color: var(--accent-green) !important;
+}
+
+.theme-neumorph .header .btn-primary {
+  background: #e6e9f0 !important;
+  color: #6d28d9 !important;
+  border-radius: 12px !important;
+  box-shadow: 4px 4px 10px #c4c9d4, -4px -4px 10px #ffffff !important;
+  border: none !important;
+}
+
+.theme-neumorph .footer {
+  background: #e6e9f0 !important;
+  color: #52525b !important;
+  border-top: none !important;
+  box-shadow: inset 0 6px 15px rgba(0, 0, 0, 0.05) !important;
+}
+
+.theme-neumorph .footer h4 {
+  color: #3b3f4a !important;
+  font-weight: 700 !important;
+}
+
+.theme-neumorph .btn-primary {
+  background: #e6e9f0 !important;
+  color: #6d28d9 !important;
+  border-radius: 14px !important;
+  box-shadow: 6px 6px 15px #c4c9d4, -6px -6px 15px #ffffff !important;
+  border: none !important;
+  font-weight: 700 !important;
+  transition: all 0.2s ease !important;
+}
+
+.theme-neumorph .btn-primary:hover {
+  box-shadow: inset 3px 3px 6px #c4c9d4, inset -3px -3px 6px #ffffff !important;
+  color: #5b21b6 !important;
+}
+
+.theme-neumorph .btn-secondary,
+.theme-neumorph .btn-outline-white {
+  background: #e6e9f0 !important;
+  color: #3b3f4a !important;
+  border-radius: 14px !important;
+  box-shadow: inset 3px 3px 6px #c4c9d4, inset -3px -3px 6px #ffffff !important;
+  border: none !important;
+  font-weight: 700 !important;
+}
+
+.theme-neumorph .btn-secondary:hover {
+  box-shadow: 6px 6px 15px #c4c9d4, -6px -6px 15px #ffffff !important;
+}
+
+.theme-neumorph .system-panel,
+.theme-neumorph .news-card,
+.theme-neumorph .project-card,
+.theme-neumorph .contact-form-card {
+  background: #e6e9f0 !important;
+  border: none !important;
+  border-radius: 22px !important;
+  box-shadow: 8px 8px 20px #c4c9d4, -8px -8px 20px #ffffff !important;
+  transition: transform 0.3s ease !important;
+}
+
+.theme-neumorph .system-panel:hover,
+.theme-neumorph .news-card:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 12px 12px 28px #b8bdc9, -12px -12px 28px #ffffff !important;
+}
+
+
+/* =================================================================
+   14. Obsidian Dark Luxe Theme (.theme-luxe)
+   ================================================================= */
+.theme-luxe {
+  --bg-white: #0c0c0e;
+  --bg-light: #141416;
+  --primary-dark: #f4f4f5;
+  --text-main: #e8e6e1;
+  --text-muted: #b7b3aa;
+  --border-color: rgba(201, 162, 75, 0.25);
+  --accent-green: #c9a24b; /* Gold */
+  --font-heading: 'Playfair Display', serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+.theme-luxe {
+  background: #0c0c0e !important;
+  color: #e8e6e1 !important;
+}
+
+.theme-luxe .header {
+  background: #0c0c0eed !important;
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(201, 162, 75, 0.15) !important;
+}
+
+.theme-luxe .header .nav-link {
+  color: #e8e6e1 !important;
+  font-family: var(--font-body) !important;
+  letter-spacing: 0.05em !important;
+  font-weight: 500 !important;
+}
+
+.theme-luxe .header .nav-link:hover,
+.theme-luxe .header .nav-link.active {
+  color: var(--accent-green) !important;
+}
+
+.theme-luxe .header .btn-primary {
+  background: var(--accent-green) !important;
+  color: #0c0c0e !important;
+  border-radius: 0 !important;
+  font-weight: 600 !important;
+  border: none !important;
+}
+
+.theme-luxe .footer {
+  background: #0c0c0e !important;
+  color: #b7b3aa !important;
+  border-top: 1px solid rgba(201, 162, 75, 0.15) !important;
+}
+
+.theme-luxe .footer h4 {
+  font-family: var(--font-heading) !important;
+  color: #e8e6e1 !important;
+}
+
+.theme-luxe .footer-links a:hover {
+  color: var(--accent-green) !important;
+}
+
+.theme-luxe h1,
+.theme-luxe h2,
+.theme-luxe h3 {
+  font-family: var(--font-heading) !important;
+  font-weight: 500 !important;
+  color: #e8e6e1 !important;
+  font-style: italic !important;
+}
+
+.theme-luxe .home-hero h1 {
+  font-size: clamp(2.4rem, 6vw, 4.4rem) !important;
+  line-height: 1.1 !important;
+}
+
+.theme-luxe .btn-primary {
+  background: var(--accent-green) !important;
+  color: #0c0c0e !important;
+  border-radius: 0 !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  padding: 0.85rem 2.2rem !important;
+  border: none !important;
+  transition: all 0.3s ease !important;
+}
+
+.theme-luxe .btn-primary:hover {
+  background: #d4af37 !important;
+  box-shadow: 0 0 15px rgba(201, 162, 75, 0.4) !important;
+}
+
+.theme-luxe .btn-secondary,
+.theme-luxe .btn-outline-white {
+  background: transparent !important;
+  color: #e8e6e1 !important;
+  border: 1px solid var(--accent-green) !important;
+  border-radius: 0 !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.1em !important;
+}
+
+.theme-luxe .btn-secondary:hover {
+  background: rgba(201, 162, 75, 0.1) !important;
+}
+
+.theme-luxe .kicker,
+.theme-luxe span.kicker {
+  color: var(--accent-green) !important;
+  font-family: var(--font-body) !important;
+  font-weight: 600 !important;
+  font-size: 0.72rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.25em !important;
+  margin-bottom: 0.8rem !important;
+  display: inline-block !important;
+  background: transparent !important;
+}
+
+.theme-luxe .system-panel,
+.theme-luxe .news-card,
+.theme-luxe .project-card,
+.theme-luxe .contact-form-card {
+  background: #141416 !important;
+  border: 1px solid rgba(201, 162, 75, 0.15) !important;
+  border-radius: 2px !important;
+  box-shadow: none !important;
+  transition: border-color 0.4s ease !important;
+}
+
+.theme-luxe .system-panel:hover,
+.theme-luxe .news-card:hover {
+  border-color: var(--accent-green) !important;
+}
+
+
+/* =================================================================
+   18. Energy Pulse Technical Theme (.theme-pulse)
+   ================================================================= */
+.theme-pulse {
+  --bg-white: #0a0e14;
+  --bg-light: #0d121c;
+  --primary-dark: #e6f9ff;
+  --text-main: #e6f9ff;
+  --text-muted: #9fc4d4;
+  --border-color: rgba(24, 224, 200, 0.3);
+  --accent-green: #18e0c8; /* Cyan */
+  --accent-lime: #b6ff3a;
+  --font-heading: 'Space Grotesk', sans-serif;
+  --font-body: 'Space Grotesk', sans-serif;
+}
+
+.theme-pulse {
+  background: #0a0e14 !important;
+  color: #e6f9ff !important;
+}
+
+.theme-pulse .header {
+  background: #0a0e14f0 !important;
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(24, 224, 200, 0.25) !important;
+}
+
+.theme-pulse .header .nav-link {
+  color: #e6f9ff !important;
+  font-family: var(--font-body) !important;
+  font-weight: 500 !important;
+}
+
+.theme-pulse .header .nav-link:hover,
+.theme-pulse .header .nav-link.active {
+  color: var(--accent-lime) !important;
+}
+
+.theme-pulse .header .btn-primary {
+  background: linear-gradient(90deg, var(--accent-green), var(--accent-lime)) !important;
+  color: #06121a !important;
+  border-radius: 999px !important;
+  border: none !important;
+  font-weight: 700 !important;
+}
+
+.theme-pulse .footer {
+  background: #0a0e14 !important;
+  color: #9fc4d4 !important;
+  border-top: 1px solid rgba(24, 224, 200, 0.25) !important;
+}
+
+.theme-pulse .footer h4 {
+  font-family: var(--font-heading) !important;
+  color: #ffffff !important;
+}
+
+.theme-pulse .btn-primary {
+  background: linear-gradient(90deg, var(--accent-green), var(--accent-lime)) !important;
+  color: #06121a !important;
+  border-radius: 999px !important;
+  font-weight: 700 !important;
+  border: none !important;
+  transition: box-shadow 0.3s ease !important;
+}
+
+.theme-pulse .btn-primary:hover {
+  box-shadow: 0 0 20px rgba(24, 224, 200, 0.5) !important;
+}
+
+.theme-pulse .btn-secondary,
+.theme-pulse .btn-outline-white {
+  background: transparent !important;
+  color: var(--accent-green) !important;
+  border: 1px solid var(--accent-green) !important;
+  border-radius: 999px !important;
+  font-weight: 700 !important;
+}
+
+.theme-pulse .btn-secondary:hover {
+  background: rgba(24, 224, 200, 0.05) !important;
+}
+
+.theme-pulse .kicker,
+.theme-pulse span.kicker {
+  color: var(--accent-green) !important;
+  font-family: var(--font-heading) !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.2em !important;
+  text-transform: uppercase !important;
+}
+
+
+/* =================================================================
+   19. Data Ops Dashboard Theme (.theme-dataops)
+   ================================================================= */
+.theme-dataops {
+  --bg-white: #f8fafc;
+  --bg-light: #ffffff;
+  --primary-dark: #0f172a;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --border-color: #cbd5e1;
+  --accent-green: #10b981; /* Emerald Green */
+  --font-heading: 'Outfit', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+.theme-dataops {
+  background: #f8fafc !important;
+  color: #0f172a !important;
+}
+
+.theme-dataops .header {
+  background: #f8fafceb !important;
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
+.theme-dataops .header .nav-link {
+  color: #0f172a !important;
+  font-weight: 600 !important;
+}
+
+.theme-dataops .header .nav-link:hover,
+.theme-dataops .header .nav-link.active {
+  color: var(--accent-green) !important;
+}
+
+.theme-dataops .header .btn-primary {
+  background: var(--accent-green) !important;
+  color: #ffffff !important;
+  border-radius: 6px !important;
+  border: none !important;
+  font-weight: 700 !important;
+}
+
+.theme-dataops .footer {
+  background: #0f172a !important;
+  color: #94a3b8 !important;
+  border-top: 1px solid #cbd5e1 !important;
+}
+
+.theme-dataops .footer h4 {
+  color: #ffffff !important;
+}
+
+.theme-dataops .btn-primary {
+  background: var(--accent-green) !important;
+  color: #ffffff !important;
+  border-radius: 8px !important;
+  font-weight: 700 !important;
+  border: none !important;
+  box-shadow: 0 4px 10px rgba(16, 185, 129, 0.25) !important;
+}
+
+.theme-dataops .btn-primary:hover {
+  background: #059669 !important;
+}
+
+.theme-dataops .btn-secondary,
+.theme-dataops .btn-outline-white {
+  background: transparent !important;
+  color: #0f172a !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 8px !important;
+  font-weight: 700 !important;
+}
+
+.theme-dataops .btn-secondary:hover {
+  background: #f1f5f9 !important;
+}
+
+.theme-dataops .kicker,
+.theme-dataops span.kicker {
+  background: #dcfce7 !important;
+  color: #16a34a !important;
+  padding: 0.3rem 0.8rem !important;
+  border-radius: 999px !important;
+  font-weight: 700 !important;
+  font-size: 0.72rem !important;
+  display: inline-block !important;
+}
+

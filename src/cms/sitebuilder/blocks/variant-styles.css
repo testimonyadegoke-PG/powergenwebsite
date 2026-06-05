@@ -1,0 +1,322 @@
+/* ============================================================
+   VARIANT-SPECIFIC STYLES
+   CSS that cannot be expressed as inline styles:
+   keyframes, clip-paths, pseudo-elements, hover effects
+   ============================================================ */
+
+/* ---- Variant Animations ---- */
+
+@keyframes v2-scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+@keyframes v2-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+@keyframes v3-pulse-ring {
+  0% { transform: scale(0.95); opacity: 0.7; }
+  50% { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.7; }
+}
+@keyframes v5-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+@keyframes v6-sway {
+  0%, 100% { transform: rotate(-1deg); }
+  50% { transform: rotate(1deg); }
+}
+@keyframes v7-glow-pulse {
+  0%, 100% { box-shadow: 0 0 15px rgba(167,139,250,0.3); }
+  50% { box-shadow: 0 0 30px rgba(167,139,250,0.6); }
+}
+@keyframes v8-slide-in-left {
+  from { transform: translateX(-30px) skewX(-2deg); opacity: 0; }
+  to { transform: translateX(0) skewX(0); opacity: 1; }
+}
+@keyframes v8-slide-in-right {
+  from { transform: translateX(30px) skewX(2deg); opacity: 0; }
+  to { transform: translateX(0) skewX(0); opacity: 1; }
+}
+@keyframes v9-fade-up {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+@keyframes v10-drop-in {
+  from { transform: translateY(-10px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+@keyframes v4-caution-stripe {
+  0% { background-position: 0 0; }
+  100% { background-position: 28px 0; }
+}
+
+/* ---- Variant 2: Dashboard / Terminal ---- */
+.variant-2-hero .v2-scanline {
+  position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(transparent 50%, rgba(0,255,102,0.03) 50%);
+  background-size: 100% 4px; z-index: 1;
+}
+.variant-2-terminal-bar {
+  display: flex; align-items: center; gap: 6px;
+  padding: 6px 12px; background: rgba(0,0,0,0.6);
+  border-bottom: 1px solid rgba(140,224,42,0.2);
+  font-family: 'Courier New', monospace; font-size: 0.7rem;
+  color: rgba(140,224,42,0.6);
+}
+.variant-2-terminal-bar .dot {
+  width: 8px; height: 8px; border-radius: 50%;
+}
+.variant-2-terminal-bar .dot.red { background: #ff5f56; }
+.variant-2-terminal-bar .dot.yellow { background: #ffbd2e; }
+.variant-2-terminal-bar .dot.green { background: #27c93f; }
+.variant-2-status-led {
+  display: inline-block; width: 6px; height: 6px;
+  border-radius: 50%; background: #8ce02a;
+  animation: v2-blink 2s infinite;
+  margin-right: 6px;
+}
+
+/* ---- Variant 4: Industrial ---- */
+.variant-4-caution-bar {
+  height: 6px;
+  background: repeating-linear-gradient(
+    -45deg, #f59e0b, #f59e0b 7px, #111 7px, #111 14px
+  );
+  animation: v4-caution-stripe 1s linear infinite;
+}
+.variant-4-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  background: #f59e0b;
+  color: #000;
+  font-weight: 800;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* ---- Variant 5: Community Warm ---- */
+.variant-5-card {
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 4px 24px rgba(249,115,22,0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.variant-5-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 32px rgba(249,115,22,0.15);
+}
+
+/* ---- Variant 6: Organic ---- */
+.variant-6-leaf-clip {
+  clip-path: ellipse(48% 50% at 50% 50%);
+}
+.variant-6-card {
+  border-radius: 30px 4px 30px 4px;
+  border: 1px solid rgba(34,197,94,0.2);
+  background: linear-gradient(135deg, rgba(34,197,94,0.03), transparent);
+  transition: transform 0.4s ease;
+}
+.variant-6-card:hover {
+  transform: scale(1.02);
+}
+
+/* ---- Variant 7: Metropolitan Glass ---- */
+.variant-7-glass {
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(167,139,250,0.15);
+  border-radius: 16px;
+  transition: box-shadow 0.4s ease;
+}
+.variant-7-glass:hover {
+  box-shadow: 0 0 24px rgba(167,139,250,0.2);
+}
+.variant-7-gradient-text {
+  background: linear-gradient(135deg, #a78bfa, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ---- Variant 8: Kinetic ---- */
+.variant-8-skew-section {
+  clip-path: polygon(0 4%, 100% 0, 100% 96%, 0 100%);
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+.variant-8-card {
+  transform: rotate(-1deg);
+  transition: transform 0.3s ease;
+  border-left: 4px solid #ef4444;
+}
+.variant-8-card:hover {
+  transform: rotate(0deg) scale(1.02);
+}
+.variant-8-accent-stripe {
+  position: absolute;
+  width: 120%;
+  height: 60%;
+  background: linear-gradient(135deg, rgba(239,68,68,0.1), transparent);
+  transform: skewY(-3deg);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ---- Variant 9: Editorial ---- */
+.variant-9-rule {
+  width: 60px;
+  height: 2px;
+  background: #854d0e;
+  margin: 1rem 0;
+}
+.variant-9-double-rule {
+  border-top: 2px solid #854d0e;
+  border-bottom: 1px solid #854d0e;
+  padding: 4px 0;
+  margin: 1.5rem 0;
+}
+.variant-9-dropcap::first-letter {
+  font-size: 3.5rem;
+  float: left;
+  line-height: 1;
+  margin-right: 0.5rem;
+  font-family: Georgia, serif;
+  color: #854d0e;
+  font-weight: bold;
+}
+.variant-9-pullquote {
+  font-family: Georgia, serif;
+  font-style: italic;
+  font-size: 1.4rem;
+  line-height: 1.6;
+  border-left: 3px solid #854d0e;
+  padding-left: 1.5rem;
+  margin: 2rem 0;
+  color: #44403c;
+}
+
+/* ---- Variant 10: Tactical ---- */
+.variant-10-compact-card {
+  padding: 0.8rem 1rem;
+  border: 1px solid rgba(107,114,128,0.3);
+  border-radius: 4px;
+  background: rgba(107,114,128,0.04);
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+}
+.variant-10-badge {
+  display: inline-block;
+  padding: 1px 8px;
+  border: 1px solid #6b7280;
+  color: #6b7280;
+  font-size: 0.65rem;
+  font-family: 'Courier New', monospace;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* ---- Shared utility classes ---- */
+.variant-centered-narrow {
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+.variant-img-frame {
+  border: 3px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.variant-grid-2x2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+.variant-grid-3col {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+.variant-grid-bento {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 1rem;
+}
+.variant-grid-bento > :first-child {
+  grid-row: span 2;
+}
+.variant-timeline {
+  position: relative;
+  padding-left: 2rem;
+}
+.variant-timeline::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--border-color, #e2e8f0);
+}
+.variant-timeline-item {
+  position: relative;
+  padding-bottom: 2rem;
+}
+.variant-timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -2.35rem;
+  top: 0.5rem;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent-green, #7cbd24);
+  border: 2px solid var(--bg-white, #fff);
+}
+
+/* ---- Responsive inside builder canvas ---- */
+.builder-canvas-tablet .variant-grid-3col,
+.builder-canvas-tablet .variant-grid-bento {
+  grid-template-columns: 1fr 1fr !important;
+}
+.builder-canvas-tablet .variant-grid-bento > :first-child {
+  grid-row: span 1 !important;
+}
+.builder-canvas-mobile .variant-grid-3col,
+.builder-canvas-mobile .variant-grid-2x2,
+.builder-canvas-mobile .variant-grid-bento {
+  grid-template-columns: 1fr !important;
+}
+
+/* ============================================================
+   VARIANTS 11–20 — new design-language animations
+   ============================================================ */
+
+/* V18 Energy Pulse — sweeping glow line */
+@keyframes v18-pulse-sweep {
+  0%   { transform: translateX(-100%); opacity: 0; }
+  40%  { opacity: 1; }
+  100% { transform: translateX(100%); opacity: 0; }
+}
+.v18-pulse-line {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 2px;
+  background: linear-gradient(90deg, transparent, #18e0c8, #b6ff3a, transparent);
+  animation: v18-pulse-sweep 4s linear infinite;
+  pointer-events: none;
+}
+.v18-pulse::after {
+  content: '';
+  position: absolute;
+  bottom: -120px; left: -80px;
+  width: 360px; height: 360px;
+  background: radial-gradient(circle, rgba(24,224,200,0.25), transparent 65%);
+  filter: blur(30px);
+  pointer-events: none;
+}
