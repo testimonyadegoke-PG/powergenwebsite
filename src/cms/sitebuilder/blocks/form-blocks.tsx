@@ -4,6 +4,16 @@ import { useCms } from '../../useCms';
 import { resolveProp, getBlockStyle } from './pg-blocks';
 import { vTheme, VSection, VKicker } from './variant-kit';
 import type { BlockComponentProps } from '../types';
+
+// Helper to determine active variant based on block props or activeTemplate
+const getActiveVariant = (block: any, activeTemplate?: string): number => {
+  if (block.props.variant !== undefined) return Number(block.props.variant);
+  const templateIndexMap: Record<string, number> = {
+    default: 1, agri: 2, ev: 3, microgrid: 4, pioneer: 5, hydrogen: 6, bess: 7,
+    corporate_a: 8, corporate_b: 9, corporate_c: 10, corporate_d: 11, corporate_e: 12
+  };
+  return templateIndexMap[activeTemplate || 'default'] || 1;
+};
 import { submitLead, submitJobApplication } from '../../api';
 import { newsData } from '../../../data/newsData';
 
@@ -38,15 +48,17 @@ const fallbackJobs = [
 // Helper to get Contact Form Kicker/Title/Text
 const getContactVariantContent = (v: number) => {
   switch (v) {
-    case 2: return { tag: 'OPERATIONS REPORT', title: 'Telemetry Node Service Request', text: 'Initiate a connection to remote command center or register subgrid maintenance request loops.' };
-    case 3: return { tag: 'HYDROGEN PIPELINE', title: 'Consult Clean Electrolysis Installation', text: 'Engage with project engineers to map water splitting grid modules and local logistics.' };
-    case 4: return { tag: 'BESS INTEGRATION', title: 'Request Substation Battery Sizing Audit', text: 'Audit your industrial peak demand fees and size custom LFP container battery banks.' };
-    case 5: return { tag: 'MINI-GRID EXPANSION', title: 'Propose Prepaid Community Connection', text: 'Partner with local municipalities to construct GSM smart prepaid microgrids.' };
-    case 6: return { tag: 'AGRO-PV CONSULTATION', title: 'Agrophotovoltaic Site Suitability Survey', text: 'Evaluate raised solar row shielding benefits for local crops and water pumping lines.' };
-    case 7: return { tag: 'MUNICIPAL PLAN', title: 'Urban Decarbonization Joint Consultation', text: 'Engage city authorities to transitions municipal buildings, EV transit loops, and carbon offset ledgers.' };
-    case 8: return { tag: 'CO-GENERATION MIX', title: 'Hybrid Wind & Solar Cogeneration Proposal', text: 'Merge wind speeds and solar tracker panels into a single balanced co-gen fuel saver.' };
-    case 9: return { tag: 'DFI PPA FUNDING', title: 'Submit Clean Yield Asset Portfolio Deal', text: 'Connect solar and storage yield projects to institutional DFI equity financing.' };
-    case 10: return { tag: 'FIELD DEPLOYMENT', title: 'Dispatch Containerized Mobile Solar Cube', text: 'Order satcom-linked offgrid power containers built for extreme climates.' };
+    case 2: return { tag: 'AGRO-PV CONSULTATION', title: 'Agrophotovoltaic Site Suitability Survey', text: 'Evaluate raised solar row shielding benefits for local crops and water pumping lines.' };
+    case 3: return { tag: 'MUNICIPAL PLAN', title: 'Urban Decarbonization Joint Consultation', text: 'Engage city authorities to transitions municipal buildings, EV transit loops, and carbon offset ledgers.' };
+    case 4: return { tag: 'MINI-GRID EXPANSION', title: 'Propose Prepaid Community Connection', text: 'Partner with local municipalities to construct GSM smart prepaid microgrids.' };
+    case 5: return { tag: 'FIELD DEPLOYMENT', title: 'Dispatch Containerized Mobile Solar Cube', text: 'Order satcom-linked offgrid power containers built for extreme climates.' };
+    case 6: return { tag: 'HYDROGEN PIPELINE', title: 'Consult Clean Electrolysis Installation', text: 'Engage with project engineers to map water splitting grid modules and local logistics.' };
+    case 7: return { tag: 'BESS INTEGRATION', title: 'Request Substation Battery Sizing Audit', text: 'Audit your industrial peak demand fees and size custom LFP container battery banks.' };
+    case 8: return { tag: 'INDUSTRIAL SOLAR', title: 'C&I Installation Assessment', text: 'Request a site evaluation for deploying high-yield solar and storage on your facility.' };
+    case 9: return { tag: 'PROJECT FINANCE', title: 'Utility-Scale PPA Proposal', text: 'Connect with our project finance desk to explore power purchase agreements for utility scale solar.' };
+    case 10: return { tag: 'RURAL ELECTRIFICATION', title: 'Mini-grid Concession Inquiry', text: 'Discuss mini-grid development partnerships for powering off-grid remote populations.' };
+    case 11: return { tag: 'CORPORATE PPA', title: 'Corporate Decarbonization Consultation', text: 'Align your corporate net-zero targets with our verified renewable energy attribute portfolios.' };
+    case 12: return { tag: 'HYBRID SYSTEMS', title: 'Advanced Hybrid Microgrid Design', text: 'Engage our engineering team to architect AI-dispatched hybrid power systems for critical loads.' };
     default: return { tag: 'GET IN TOUCH', title: 'Request a Consult', text: 'We partner with commercial businesses, agricultural developers, utility financiers, and government entities to deploy solar and battery storage grids.' };
   }
 };
@@ -54,9 +66,9 @@ const getContactVariantContent = (v: number) => {
 // ----------------------------------------------------
 // BLOCK 1: PgContactFormBlock
 // ----------------------------------------------------
-export const PgContactFormBlock: React.FC<BlockComponentProps> = ({ block, onChange, selected }) => {
+export const PgContactFormBlock: React.FC<BlockComponentProps> = ({ block, onChange, selected, activeTemplate }) => {
   const { content } = useCms();
-  const variant = Number(block.props.variant || 1);
+  const variant = getActiveVariant(block, activeTemplate);
   const vData = getContactVariantContent(variant);
 
   const tag = resolveProp(block.props, 'tag', vData.tag);
@@ -71,10 +83,17 @@ export const PgContactFormBlock: React.FC<BlockComponentProps> = ({ block, onCha
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  // Honeypot: real users never see/fill this; bots usually do.
+  const [botField, setBotField] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus(null);
+    if (botField) {
+      // Silently accept to avoid signalling the trap to bots.
+      setStatus({ type: 'success', text: 'Thank you! Your inquiry has been sent successfully.' });
+      return;
+    }
     if (!name.trim() || !email.trim() || !message.trim()) {
       setStatus({ type: 'error', text: 'Please fill in all required fields.' });
       return;
@@ -106,47 +125,57 @@ export const PgContactFormBlock: React.FC<BlockComponentProps> = ({ block, onCha
 
   const countries = content.settings.hubs.length > 0 ? content.settings.hubs : ['Kenya', 'Nigeria', 'Sierra Leone', 'DR Congo'];
 
-  const renderFormInputs = (inputStyle: React.CSSProperties, labelStyle: React.CSSProperties, buttonStyle: React.CSSProperties) => {
+  const renderFormInputs = (inputStyle: React.CSSProperties, labelStyle: React.CSSProperties, buttonStyle: React.CSSProperties, useClasses = false) => {
     return (
       <form onSubmit={handleSubmit} noValidate>
+        <input
+          type="text"
+          name="company_website"
+          tabIndex={-1}
+          autoComplete="off"
+          aria-hidden="true"
+          value={botField}
+          onChange={(e) => setBotField(e.target.value)}
+          style={{ position: 'absolute', left: '-9999px', width: '1px', height: '1px', opacity: 0 }}
+        />
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
           <div>
-            <label htmlFor="name" style={labelStyle}>Name (required)</label>
-            <input type="text" id="name" placeholder="John Doe" value={name} onChange={(e) => setName(e.target.value)} required style={inputStyle} />
+            <label htmlFor="name" className={useClasses ? "premium-label" : ""} style={useClasses ? {} : labelStyle}>Name (required)</label>
+            <input type="text" id="name" placeholder="John Doe" value={name} onChange={(e) => setName(e.target.value)} required className={useClasses ? "premium-input" : ""} style={useClasses ? {} : inputStyle} />
           </div>
           <div>
-            <label htmlFor="email" style={labelStyle}>Email (required)</label>
-            <input type="email" id="email" placeholder="john@company.com" value={email} onChange={(e) => setEmail(e.target.value)} required style={inputStyle} />
+            <label htmlFor="email" className={useClasses ? "premium-label" : ""} style={useClasses ? {} : labelStyle}>Email (required)</label>
+            <input type="email" id="email" placeholder="john@company.com" value={email} onChange={(e) => setEmail(e.target.value)} required className={useClasses ? "premium-input" : ""} style={useClasses ? {} : inputStyle} />
           </div>
         </div>
 
-        <div style={{ marginBottom: '1rem' }}>
-          <label style={labelStyle}>Inquiry Type</label>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', marginTop: '0.3rem' }}>
+        <div style={{ marginBottom: '1.2rem' }}>
+          <label className={useClasses ? "premium-label" : ""} style={useClasses ? {} : labelStyle}>Inquiry Type</label>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', marginTop: '0.4rem' }}>
             {['General Inquiries', 'Business Partnership', 'Donation', 'Press Release'].map((type) => (
-              <label key={type} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem', cursor: 'pointer', ...labelStyle }}>
-                <input type="radio" name="inquiry-type-radio" value={type} checked={inquiryType === type} onChange={(e) => setInquiryType(e.target.value)} />
+              <label key={type} className={useClasses ? "premium-label" : ""} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem', cursor: 'pointer', textTransform: 'none', letterSpacing: 'normal', fontWeight: 'normal', ...labelStyle }}>
+                <input type="radio" name="inquiry-type-radio" value={type} checked={inquiryType === type} onChange={(e) => setInquiryType(e.target.value)} style={{ accentColor: 'var(--accent-green)' }} />
                 {type}
               </label>
             ))}
           </div>
         </div>
 
-        <div style={{ marginBottom: '1rem' }}>
-          <label htmlFor="country" style={labelStyle}>Country of Interest (required)</label>
-          <select id="country" value={country} onChange={(e) => setCountry(e.target.value)} required style={inputStyle}>
+        <div style={{ marginBottom: '1.2rem' }}>
+          <label htmlFor="country" className={useClasses ? "premium-label" : ""} style={useClasses ? {} : labelStyle}>Country of Interest (required)</label>
+          <select id="country" value={country} onChange={(e) => setCountry(e.target.value)} required className={useClasses ? "premium-input" : ""} style={useClasses ? {} : inputStyle}>
             <option value="" disabled>Select your country</option>
             {countries.map((hub) => <option value={hub} key={hub}>{hub}</option>)}
             <option value="Other">Other</option>
           </select>
         </div>
 
-        <div style={{ marginBottom: '1.2rem' }}>
-          <label htmlFor="message" style={labelStyle}>Message (required)</label>
-          <textarea id="message" rows={4} placeholder="Tell us about your project requirements..." value={message} onChange={(e) => setMessage(e.target.value)} required style={{ ...inputStyle, resize: 'vertical' }}></textarea>
+        <div style={{ marginBottom: '1.5rem' }}>
+          <label htmlFor="message" className={useClasses ? "premium-label" : ""} style={useClasses ? {} : labelStyle}>Message (required)</label>
+          <textarea id="message" rows={4} placeholder="Tell us about your project requirements..." value={message} onChange={(e) => setMessage(e.target.value)} required className={useClasses ? "premium-input" : ""} style={{ ...(useClasses ? {} : inputStyle), resize: 'vertical' }}></textarea>
         </div>
 
-        <button type="submit" disabled={loading} style={buttonStyle}>
+        <button type="submit" disabled={loading} className={useClasses ? "premium-submit-btn" : ""} style={useClasses ? {} : buttonStyle}>
           {loading ? 'Submitting Form...' : 'Submit Form'}
         </button>
         {status && (
@@ -555,31 +584,74 @@ export const PgContactFormBlock: React.FC<BlockComponentProps> = ({ block, onCha
 
     default: // V1: Standard 2-Col
       return (
-        <section className={`contact-section ${selected ? 'builder-selected-block' : ''}`} style={getBlockStyle(block, 'container', { padding: '5rem 0', backgroundColor: 'var(--bg-light)' })}>
-          <div className="container">
-            <div className="contact-grid">
-              <div className="contact-info-col">
-                <span className="kicker" style={{ color: 'var(--accent-green)', fontWeight: 700, textTransform: 'uppercase', fontSize: '0.85rem' }}>{tag}</span>
-                <h3 onBlur={(e) => onChange(block.id, { title: e.target.innerText })} contentEditable suppressContentEditableWarning style={{ outline: 'none', margin: '0.5rem 0 1rem 0' }}>{title}</h3>
-                <p onBlur={(e) => onChange(block.id, { text: e.target.innerText })} contentEditable suppressContentEditableWarning style={{ outline: 'none', color: 'var(--text-muted)' }}>{text}</p>
-                <div style={{ marginTop: '2rem', borderTop: '1px solid var(--border-color)', paddingTop: '1.5rem' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', marginBottom: '1rem' }}>
-                    <svg viewBox="0 0 24 24" style={{ width: '20px', height: '20px', fill: 'var(--accent-green)' }}><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-                    <span style={{ fontSize: '0.9rem', fontWeight: 600 }}>info@powergen-re.com</span>
+        <section className={`contact-section ${selected ? 'builder-selected-block' : ''}`} style={getBlockStyle(block, 'container', { padding: '6rem 0', backgroundColor: '#fdfdfc' })}>
+          <div className="container" style={{ maxWidth: '1200px', margin: '0 auto' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1.1fr 0.9fr', gap: '5rem', alignItems: 'start' }}>
+              <div className="contact-info-col" style={{ paddingRight: '1rem' }}>
+                <span className="kicker" style={{ color: 'var(--accent-green)', fontWeight: 800, textTransform: 'uppercase', fontSize: '0.8rem', letterSpacing: '0.15em' }}>{tag}</span>
+                <h2 onBlur={(e) => onChange(block.id, { title: e.target.innerText })} contentEditable suppressContentEditableWarning style={{ outline: 'none', margin: '0.8rem 0 1.5rem 0', fontSize: '2.5rem', fontWeight: '800', color: 'var(--ink)' }}>{title}</h2>
+                <p onBlur={(e) => onChange(block.id, { text: e.target.innerText })} contentEditable suppressContentEditableWarning style={{ outline: 'none', color: 'rgba(16, 20, 17, 0.65)', lineHeight: '1.6', fontSize: '1.02rem', marginBottom: '2.5rem' }}>{text}</p>
+                
+                {/* Contact information layout from screenshot */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+                  {/* Email */}
+                  <div style={{ display: 'flex', alignItems: 'start', gap: '1.2rem' }}>
+                    <div style={{ flexShrink: 0, marginTop: '0.2rem' }}>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="#7cbd24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ width: '32px', height: '32px' }}><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                    </div>
+                    <div>
+                      <h4 style={{ color: 'var(--accent-green)', fontWeight: '800', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.05em', margin: 0 }}>EMAIL</h4>
+                      <a href="mailto:info@powergen-re.com" style={{ fontSize: '1.05rem', fontWeight: '500', color: 'var(--ink)', textDecoration: 'none', display: 'block', margin: '0.1rem 0' }}>info@powergen-re.com</a>
+                      <span style={{ fontSize: '0.85rem', color: 'rgba(16, 20, 17, 0.55)' }}>We'll respond within 24 hours</span>
+                    </div>
                   </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
-                    <svg viewBox="0 0 24 24" style={{ width: '20px', height: '20px', fill: 'var(--accent-green)' }}><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>
-                    <span style={{ fontSize: '0.9rem', fontWeight: 600 }}>Nairobi, Kenya</span>
+                  
+                  {/* Headquarters */}
+                  <div style={{ display: 'flex', alignItems: 'start', gap: '1.2rem' }}>
+                    <div style={{ flexShrink: 0, marginTop: '0.2rem' }}>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="#7cbd24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ width: '32px', height: '32px' }}><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                    </div>
+                    <div>
+                      <h4 style={{ color: 'var(--accent-green)', fontWeight: '800', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.05em', margin: 0 }}>HEADQUARTERS</h4>
+                      <span style={{ fontSize: '1.05rem', fontWeight: '500', color: 'var(--ink)', display: 'block', margin: '0.1rem 0' }}>Nairobi, Kenya</span>
+                      <span style={{ fontSize: '0.85rem', color: 'rgba(16, 20, 17, 0.55)' }}>Serving 13 African markets</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Regional offices grid from screenshot */}
+                <div style={{ borderTop: '1px solid rgba(16, 20, 17, 0.12)', marginTop: '3rem', paddingTop: '2rem' }}>
+                  <h4 style={{ color: 'var(--accent-green)', fontWeight: '800', fontSize: '0.8rem', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '1.2rem' }}>REGIONAL OFFICES</h4>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1.1fr 1.8fr 1.2fr', gap: '1.5rem' }}>
+                    <div style={{ borderRight: '1px solid rgba(16, 20, 17, 0.12)', paddingRight: '1rem' }}>
+                      <strong style={{ display: 'block', fontSize: '0.95rem', color: 'var(--ink)', marginBottom: '0.2rem' }}>East Africa:</strong>
+                      <span style={{ fontSize: '0.88rem', color: 'rgba(16, 20, 17, 0.65)' }}>Nairobi, Kenya</span>
+                    </div>
+                    <div style={{ borderRight: '1px solid rgba(16, 20, 17, 0.12)', paddingRight: '1rem' }}>
+                      <strong style={{ display: 'block', fontSize: '0.95rem', color: 'var(--ink)', marginBottom: '0.2rem' }}>West Africa:</strong>
+                      <span style={{ fontSize: '0.88rem', color: 'rgba(16, 20, 17, 0.65)', lineHeight: '1.4' }}>Lagos, Nigeria.<br/>Freetown, Sierra Leone</span>
+                    </div>
+                    <div>
+                      <strong style={{ display: 'block', fontSize: '0.95rem', color: 'var(--ink)', marginBottom: '0.2rem' }}>Central Africa:</strong>
+                      <span style={{ fontSize: '0.88rem', color: 'rgba(16, 20, 17, 0.65)' }}>Kinshasa, DR Congo</span>
+                    </div>
                   </div>
                 </div>
               </div>
+              
               <div className="contact-form-col">
-                <div className="contact-form-card" style={{ background: '#fff', padding: '2.5rem', borderRadius: 'var(--border-radius-md)', boxShadow: 'var(--shadow-md)' }}>
-                  {renderFormInputs(
-                    { background: '#fff', border: '1px solid var(--border-color)', padding: '0.8rem', width: '100%', borderRadius: 'var(--border-radius-sm)', outline: 'none', fontSize: '0.9rem' },
-                    { color: 'var(--text-color)', display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.3rem' },
-                    { background: 'var(--accent-green)', color: '#fff', border: 'none', padding: '0.9rem', width: '100%', cursor: 'pointer', borderRadius: 'var(--border-radius-sm)', fontSize: '0.9rem', fontWeight: 700 }
-                  )}
+                <div 
+                  className="contact-form-card" 
+                  style={{ 
+                    background: '#fff', 
+                    padding: '3.5rem 3rem', 
+                    borderRadius: '12px', 
+                    border: '1px solid rgba(10, 17, 40, 0.06)', 
+                    borderTop: '5px solid var(--accent-green)',
+                    boxShadow: '0 20px 50px rgba(10, 17, 40, 0.04)' 
+                  }}
+                >
+                  {renderFormInputs({}, {}, {}, true)}
                 </div>
               </div>
             </div>
@@ -592,9 +664,9 @@ export const PgContactFormBlock: React.FC<BlockComponentProps> = ({ block, onCha
 // ----------------------------------------------------
 // BLOCK 2: PgJobsBoardBlock
 // ----------------------------------------------------
-export const PgJobsBoardBlock: React.FC<BlockComponentProps> = ({ block, selected }) => {
+export const PgJobsBoardBlock: React.FC<BlockComponentProps> = ({ block, selected, activeTemplate }) => {
   const { content } = useCms();
-  const variant = Number(block.props.variant || 1);
+  const variant = getActiveVariant(block, activeTemplate);
   const jobs = (content.jobs && content.jobs.length > 0) ? content.jobs.filter(j => j.status === 'open') : fallbackJobs;
 
   const [selectedJobId, setSelectedJobId] = useState<string | null>(null);
@@ -608,13 +680,22 @@ export const PgJobsBoardBlock: React.FC<BlockComponentProps> = ({ block, selecte
   });
   const [appLoading, setAppLoading] = useState(false);
   const [appStatus, setAppStatus] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [botField, setBotField] = useState('');
 
   const handleApply = async (e: React.FormEvent, jobId: string) => {
     e.preventDefault();
     setAppStatus(null);
+    if (botField) {
+      setAppStatus({ type: 'success', text: 'Application submitted successfully! Our recruitment team will review and reply.' });
+      return;
+    }
     const { name, email, phone, location, portfolio, coverLetter } = appValues;
     if (!name.trim() || !email.trim() || !location.trim()) {
       setAppStatus({ type: 'error', text: 'Please fill in all required fields.' });
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setAppStatus({ type: 'error', text: 'Please enter a valid email address.' });
       return;
     }
     setAppLoading(true);
@@ -636,6 +717,16 @@ export const PgJobsBoardBlock: React.FC<BlockComponentProps> = ({ block, selecte
   const renderApplicationForm = (jobId: string, inputStyle: React.CSSProperties, labelStyle: React.CSSProperties, buttonStyle: React.CSSProperties) => {
     return (
       <form onSubmit={(e) => handleApply(e, jobId)} style={{ marginTop: '1.5rem', borderTop: '1px solid rgba(0,0,0,0.1)', paddingTop: '1.5rem' }}>
+        <input
+          type="text"
+          name="company_website"
+          tabIndex={-1}
+          autoComplete="off"
+          aria-hidden="true"
+          value={botField}
+          onChange={(e) => setBotField(e.target.value)}
+          style={{ position: 'absolute', left: '-9999px', width: '1px', height: '1px', opacity: 0 }}
+        />
         <h4 style={{ marginBottom: '1rem', ...labelStyle }}>Quick Apply Form</h4>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
           <div>
@@ -1275,9 +1366,9 @@ export const PgJobsBoardBlock: React.FC<BlockComponentProps> = ({ block, selecte
 // ----------------------------------------------------
 // BLOCK 3: PgNewsGridBlock
 // ----------------------------------------------------
-export const PgNewsGridBlock: React.FC<BlockComponentProps> = ({ block, selected, onChange }) => {
+export const PgNewsGridBlock: React.FC<BlockComponentProps> = ({ block, selected, activeTemplate, onChange }) => {
   const { content } = useCms();
-  const variant = Number(block.props.variant || 1);
+  const variant = getActiveVariant(block, activeTemplate);
   const articles = content.news && content.news.length > 0 ? content.news : newsData;
 
   switch (variant) {

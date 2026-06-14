@@ -1,17 +1,34 @@
 import React from 'react';
 import { useCms } from '../../cms/useCms';
 import { SiteRenderer } from '../../cms/sitebuilder/renderer';
+import { Seo } from '../../components/Seo';
+import { PinnedScrollSection } from '../../components/PinnedScrollSection';
 
 export const GridServices: React.FC = () => {
   const { content } = useCms();
   const page = content.pages.gridServices;
 
+  const seo = (
+    <Seo
+      title={`${page.hero.title} — ${content.settings.brandName}`}
+      description={page.hero.subtitle}
+      image={page.hero.image}
+      path="/services/mini-grids"
+    />
+  );
+
   if (page.blocks && page.blocks.length > 0) {
-    return <SiteRenderer blocks={page.blocks} globalStyles={page.globalStyles} />;
+    return (
+      <>
+        {seo}
+        <SiteRenderer blocks={page.blocks} globalStyles={page.globalStyles} />
+      </>
+    );
   }
 
   return (
     <div className="service-page-wrapper">
+      {seo}
       {/* Grids Hero */}
       <section className="hero sub-hero" style={{ backgroundImage: `url('${page.hero.image}')` }}>
         <div className="container">
@@ -69,30 +86,74 @@ export const GridServices: React.FC = () => {
         </div>
       </section>
 
-      {/* O&M Section */}
-      <section style={{ backgroundColor: 'var(--bg-white)', borderTop: '1px solid var(--border-color)' }}>
-        <div className="container">
-          <div className="section-header reveal">
+      {/* O&M Section — pinned horizontal scroll */}
+      <PinnedScrollSection
+        heading={
+          <div className="section-header reveal" style={{ marginBottom: 0 }}>
             <span className="tag">Operations & Management</span>
             <h2>Customer & Asset Management (O&M)</h2>
             <p>PowerGen goes beyond installation. We manage the long-term operations of every solar mini/metro-grid we deploy to maintain at least 96% uptime.</p>
           </div>
-          <div className="om-card-grid">
-            {[
-              { icon: '📱', title: 'Prepaid Smart Billing', desc: 'Automated energy sales and billing through mobile money integration and smart metering capabilities, ensuring zero default risk.' },
-              { icon: '📞', title: 'Remote Customer Support', desc: 'Dedicated call-support centers to register customer complaints and provide prompt remedial maintenance services.' },
-              { icon: '🛠️', title: 'Technical Maintenance', desc: 'On-the-ground technical maintenance teams performing preventative tasks to increase uptime and prolong system lifespan.' },
-              { icon: '🖥️', title: '24/7 Asset Monitoring', desc: 'Continuous cloud-based monitoring of battery charge cycles, load demands, and inverter health for smart grid distributions.' },
-            ].map((card, idx) => (
-              <div key={card.title} className="om-card reveal" data-delay={`0.${idx + 1}`}>
-                <div className="value-icon">{card.icon}</div>
-                <h4>{card.title}</h4>
-                <p>{card.desc}</p>
+        }
+      >
+        {[
+          { num: '01', title: 'Prepaid Smart Billing', desc: 'Automated energy sales and billing through mobile money integration and smart metering capabilities, ensuring zero default risk.' },
+          { num: '02', title: 'Remote Customer Support', desc: 'Dedicated call-support centers to register customer complaints and provide prompt remedial maintenance services.' },
+          { num: '03', title: 'Technical Maintenance', desc: 'On-the-ground technical maintenance teams performing preventative tasks to increase uptime and prolong system lifespan.' },
+          { num: '04', title: '24/7 Asset Monitoring', desc: 'Continuous cloud-based monitoring of battery charge cycles, load demands, and inverter health for smart grid distributions.' },
+        ].map((card) => (
+          <div 
+            key={card.title} 
+            className="om-card" 
+            style={{ 
+              width: '340px', 
+              padding: '2.5rem 2rem 2rem', 
+              background: '#fff', 
+              border: '1px solid rgba(10, 17, 40, 0.08)',
+              borderTop: '4px solid var(--accent-green)', 
+              borderRadius: '8px', 
+              display: 'flex', 
+              flexDirection: 'column', 
+              justifyContent: 'space-between',
+              minHeight: '320px', 
+              boxShadow: '0 8px 24px rgba(10, 17, 40, 0.03)',
+              transition: 'all 0.3s ease'
+            }}
+          >
+            <div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.8rem' }}>
+                <span style={{ 
+                  fontFamily: 'var(--font-heading)', 
+                  fontSize: '0.85rem', 
+                  fontWeight: '700', 
+                  color: 'var(--accent-green)', 
+                  textTransform: 'uppercase', 
+                  letterSpacing: '1.5px',
+                  background: 'rgba(124, 189, 36, 0.1)',
+                  padding: '0.35rem 0.75rem',
+                  borderRadius: '4px'
+                }}>
+                  System {card.num}
+                </span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--accent-green)' }} />
+                  <span style={{ fontSize: '0.72rem', fontWeight: '600', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Active</span>
+                </div>
               </div>
-            ))}
+              <h4 style={{ fontSize: '1.25rem', fontWeight: '700', color: 'var(--primary-dark)', marginBottom: '0.8rem', lineHeight: '1.3' }}>
+                {card.title}
+              </h4>
+              <p style={{ fontSize: '0.92rem', color: 'var(--text-muted)', lineHeight: '1.6', margin: 0 }}>
+                {card.desc}
+              </p>
+            </div>
+            <div style={{ borderTop: '1px solid rgba(10, 17, 40, 0.05)', paddingTop: '1.2rem', marginTop: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: '600' }}>Operational SLA</span>
+              <span style={{ fontSize: '0.75rem', color: 'var(--primary-dark)', fontWeight: '700' }}>96%+ Uptime</span>
+            </div>
           </div>
-        </div>
-      </section>
+        ))}
+      </PinnedScrollSection>
 
       {/* Pillars Section */}
       <section style={{ backgroundColor: 'var(--primary-dark)', color: 'var(--bg-white)' }}>

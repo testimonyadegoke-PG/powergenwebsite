@@ -2,19 +2,35 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useCms } from '../cms/useCms';
 import { SiteRenderer } from '../cms/sitebuilder/renderer';
+import { Seo } from '../components/Seo';
 
 export const Projects: React.FC = () => {
   const { content } = useCms();
   const page = content.pages.projects;
 
+  const seo = (
+    <Seo
+      title={`${page.hero.title} — ${content.settings.brandName}`}
+      description={page.hero.subtitle}
+      image={page.hero.image}
+      path="/projects"
+    />
+  );
+
   if (page.blocks && page.blocks.length > 0) {
-    return <SiteRenderer blocks={page.blocks} globalStyles={page.globalStyles} />;
+    return (
+      <>
+        {seo}
+        <SiteRenderer blocks={page.blocks} globalStyles={page.globalStyles} />
+      </>
+    );
   }
 
   const [featured, ...rest] = content.projects;
 
   return (
     <>
+      {seo}
       {/* Projects Hero */}
       <section className="hero sub-hero" style={{ backgroundImage: `url('${page.hero.image}')` }}>
         <div className="container">

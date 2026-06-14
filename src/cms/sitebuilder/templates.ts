@@ -14,54 +14,37 @@ export const THEME_INFOS = [
   { id: 'pioneer', name: 'Off-Grid Pioneers Theme', desc: 'Rapid deployment containerized systems for remote industrial operations.', thumbnail: '/images/hero_ci_services.png' }
 ];
 
-// Define the 10 Structural Templates (swapped from themes)
+// Define the 12 Structural Templates (brand-aligned)
 export const TEMPLATE_INFOS = [
-  { id: 'default', name: 'Corporate Standard Layout', desc: 'Clean 2-column grids, centered headers, Outfit sans-serif fonts, brand green accents.', thumbnail: '/images/hero_home.png' },
-  { id: 'brutalist', name: 'Neo-Industrial Brutalism Layout', desc: 'Stark black borders, flat colors, raw asymmetric layout blocks, and monospace details.', thumbnail: '/images/project_toto.png' },
-  { id: 'cyberpunk', name: 'Cyberpunk Grid Layout', desc: 'Terminal console widgets, glowing borders, code logs, pitch-black grids, and neon lime highlights.', thumbnail: '/images/hero_minigrids.png' },
-  { id: 'glassmorphic', name: 'Glassmorphism Layout', desc: 'Frosted glass container boxes, colorful gradient backdrops, soft drop shadows, and fluid scales.', thumbnail: '/images/hero_about.png' },
-  { id: 'editorial', name: 'Editorial Chronicle Layout', desc: 'Magazine layout styles, elegant serif fonts, thin dividers, and large editorial headers.', thumbnail: '/images/hero_home.png' },
-  { id: 'minimalist', name: 'Zero Gravity Minimalist Layout', desc: 'Sparsely styled elements, ultra margins, thin outline buttons, light styles, and tiny text labels.', thumbnail: '/images/hero_services.png' },
-  { id: 'retro', name: 'Vintage Earth Layout', desc: 'Warm cream canvases, card-deck margins, earthy orange/teal highlights, and sepia filters.', thumbnail: '/images/project_toto.png' },
-  { id: 'kinetic', name: 'Kinetic Wind Layout', desc: 'Diagonal slashes, parallax scrolling turbine vectors, bold dynamic grids, and speedy transitions.', thumbnail: '/images/project_metro_grid.png' },
-  { id: 'organic', name: 'Organic Bloom Layout', desc: 'Organic curved outlines, leaf shapes, forest tones, morphing SVG shapes, and grows.', thumbnail: '/images/project_school.png' },
-  { id: 'blueprint', name: 'Drafting Blueprint Layout', desc: 'Deep blueprint blue grids, drafting board outlines, grid aligned dashed frames, and pencil lines.', thumbnail: '/images/project_metro_grid.png' },
-  // --- New design languages (variants 11–20) ---
-  { id: 'swiss', name: 'Swiss International Layout', desc: 'Strict typographic grid, oversized index numerals, red accent rules, and clean Inter sans-serif.', thumbnail: '/images/hero_home.png' },
-  { id: 'bauhaus', name: 'Bauhaus Geometric Layout', desc: 'Primary-colour blocks, circles and triangles, hard offset shadows, and bold Poppins headings.', thumbnail: '/images/hero_services.png' },
-  { id: 'neumorph', name: 'Neumorphic Soft-UI Layout', desc: 'Soft extruded panels, dual light/shadow shaping, monochrome blue-violet, and rounded surfaces.', thumbnail: '/images/hero_about.png' },
-  { id: 'luxe', name: 'Dark Luxe Editorial Layout', desc: 'Near-black canvases, gold hairlines, Playfair serif display, and elegant centred composition.', thumbnail: '/images/hero_ci_services.png' },
-  { id: 'botanical', name: 'Botanical Eco Layout', desc: 'Warm cream paper, forest green and terracotta, organic curves, and serif/sans pairing.', thumbnail: '/images/project_school.png' },
-  { id: 'isometric', name: 'Isometric Depth Layout', desc: 'Indigo palette, layered 3D card stacks, offset depth shadows, and tactile elevation.', thumbnail: '/images/project_metro_grid.png' },
-  { id: 'newsprint', name: 'Newsprint Broadsheet Layout', desc: 'Double-rule borders, condensed serif headlines, multi-column body, and drop caps.', thumbnail: '/images/hero_home.png' },
-  { id: 'pulse', name: 'Energy Pulse Layout', desc: 'Dark grid with animated cyan/lime pulse lines, neon glow, and Space Grotesk type.', thumbnail: '/images/hero_minigrids.png' },
-  { id: 'dataops', name: 'Data Dashboard Layout', desc: 'Light grid-paper canvas, bordered stat cards, status badges, and green/blue data accents.', thumbnail: '/images/project_toto.png' },
-  { id: 'claymorph', name: 'Claymorphism Layout', desc: 'Puffy pastel clay cards, big soft shadows, generous rounding, and playful Poppins type.', thumbnail: '/images/hero_about.png' }
+  { id: 'default', name: 'Corporate Core', desc: 'Clean 2-column grids, centered headers, brand green highlights.', thumbnail: '/images/hero_home.png' },
+  { id: 'agri', name: 'Agrophotovoltaic Farming', desc: 'Staggered masonry crop cards, soft green accents.', thumbnail: '/images/project_toto.png' },
+  { id: 'ev', name: 'EV Charging Grid', desc: 'Columns of charge queues, charge-bay status nodes.', thumbnail: '/images/hero_services.png' },
+  { id: 'microgrid', name: 'Rural Microgrid', desc: 'GSM prepaid meter indicators, local utility loops.', thumbnail: '/images/project_school.png' },
+  { id: 'pioneer', name: 'Off-Grid Pioneer', desc: 'Heavy-duty containerized steel frames, modular panels.', thumbnail: '/images/hero_ci_services.png' },
+  { id: 'hydrogen', name: 'Green Hydrogen Electrolysis', desc: 'Molecule split grids, pipeline pressure indicators.', thumbnail: '/images/hero_minigrids.png' },
+  { id: 'bess', name: 'BESS Storage Substation', desc: 'Battery rack rows, thermal status bars, frequency indicators.', thumbnail: '/images/hero_about.png' },
+  { id: 'corporate_a', name: 'Corporate Style A (Asymmetric Split)', desc: 'Daystar-inspired split layout, vertical kickers, floating telemetry stats.', thumbnail: '/images/hero_home.png' },
+  { id: 'corporate_b', name: 'Corporate Style B (Flat Geometric Grid)', desc: 'CrossBoundary-inspired geometric panels, teal highlights, offset cards.', thumbnail: '/images/project_metro_grid.png' },
+  { id: 'corporate_c', name: 'Corporate Style C (Modern Minimalist)', desc: 'Minimalist design, high whitespace, clean dividers, elegant spacing.', thumbnail: '/images/hero_services.png' },
+  { id: 'corporate_d', name: 'Corporate Style D (Obsidian Luxury)', desc: 'Near-black canvas, gold hairlines, Playfair Display serif headings.', thumbnail: '/images/hero_ci_services.png' },
+  { id: 'corporate_e', name: 'Corporate Style E (Staggered Editorial)', desc: 'Staggered content blocks, asymmetrical columns, circular crops.', thumbnail: '/images/project_toto.png' }
 ];
 
-// Helper to generate template blocks with specific variant index (1 to 10)
+// Helper to generate template blocks with specific variant index (1 to 12)
 const getTemplateBlocks = (templateId: string, pageType: string): any[] => {
   const templateIndexMap: Record<string, number> = {
     default: 1,
-    brutalist: 2,
-    cyberpunk: 3,
-    glassmorphic: 4,
-    editorial: 5,
-    minimalist: 6,
-    retro: 7,
-    kinetic: 8,
-    organic: 9,
-    blueprint: 10,
-    swiss: 11,
-    bauhaus: 12,
-    neumorph: 13,
-    luxe: 14,
-    botanical: 15,
-    isometric: 16,
-    newsprint: 17,
-    pulse: 18,
-    dataops: 19,
-    claymorph: 20
+    agri: 2,
+    ev: 3,
+    microgrid: 4,
+    pioneer: 5,
+    hydrogen: 6,
+    bess: 7,
+    corporate_a: 8,
+    corporate_b: 9,
+    corporate_c: 10,
+    corporate_d: 11,
+    corporate_e: 12
   };
   const variant = templateIndexMap[templateId] || 1;
 

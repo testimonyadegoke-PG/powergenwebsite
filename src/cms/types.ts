@@ -94,6 +94,31 @@ export interface CmsContent {
   applications: CmsJobApplication[];
   leads: CmsLead[];
   subscribers: CmsSubscriber[];
+  forms: CmsForm[];
+  formSubmissions: CmsFormSubmission[];
+}
+
+export interface CmsFormField {
+  id: string;
+  label: string;
+  type: 'text' | 'email' | 'textarea' | 'select' | 'radio' | 'checkbox';
+  required: boolean;
+  options?: string[];
+  placeholder?: string;
+}
+
+export interface CmsForm {
+  id: string;
+  title: string;
+  description: string;
+  fields: CmsFormField[];
+}
+
+export interface CmsFormSubmission {
+  id: string;
+  formId: string;
+  data: Record<string, any>;
+  createdAt: string;
 }
 
 // Visual Site Builder Types

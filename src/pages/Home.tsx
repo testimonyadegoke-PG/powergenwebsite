@@ -4,12 +4,12 @@ import { InteractiveMap } from '../components/InteractiveMap';
 import { AnimatedCounter } from '../components/AnimatedCounter';
 import { useCms } from '../cms/useCms';
 import { SiteRenderer } from '../cms/sitebuilder/renderer';
-
-const fieldNotes = [
-  'Hybrid solar and battery systems for facilities that cannot afford downtime.',
-  'Utility-grade mini and metro-grids designed around community demand growth.',
-  'Local operations teams backed by remote monitoring, maintenance, and finance.',
-];
+import { Seo } from '../components/Seo';
+import { HomeHero } from '../components/HomeHero';
+import { SystemAnatomy } from '../components/SystemAnatomy';
+import { EnergyParticles } from '../components/EnergyParticles';
+import { BadgeIcon } from '../components/BadgeIcon';
+import { Zap, Cpu, ShieldCheck, Globe } from 'lucide-react';
 
 const operatingModes = [
   {
@@ -20,24 +20,72 @@ const operatingModes = [
     link: '/services/c-i',
     metrics: ['Up to 40% energy savings', '99.9% uptime target', 'Zero upfront capex options'],
   },
-  {
-    eyebrow: 'Mini and Metro-Grids',
-    title: 'Reliable utility service for communities growing beyond the grid edge.',
-    text: 'We build and operate solar-powered distribution networks with smart metering, customer support, and field teams embedded in the places they serve.',
-    image: '/images/hero_minigrids.png',
-    link: '/services/mini-grids',
-    metrics: ['Prepaid metering', '24/7 system monitoring', 'Utility-grade operations'],
-  },
+];
+
+const partnerLogos = [
+  { name: 'Accenture', url: 'https://powergen-renewable-energy.com/wp-content/uploads/2025/07/accenture-logo.jpg' },
+  { name: 'Camco', url: 'https://powergen-renewable-energy.com/wp-content/uploads/2025/07/camco-clean-energy-logo.jpg' },
+  { name: 'EEP Africa', url: 'https://powergen-renewable-energy.com/wp-content/uploads/2025/07/energy-and-environent-partnership-trust-fund-logo.jpg' },
+  { name: 'Engie', url: 'https://powergen-renewable-energy.com/wp-content/uploads/2025/07/engie-logo.jpg' },
+  { name: 'InfraCo Africa', url: 'https://powergen-renewable-energy.com/wp-content/uploads/2025/07/infraco-africa-logo-1.png' },
+  { name: 'EDFI', url: 'https://powergen-renewable-energy.com/wp-content/uploads/2025/07/logo_edfi.jpg' },
+  { name: 'Philips', url: 'https://powergen-renewable-energy.com/wp-content/uploads/2025/07/philips-logo.jpg' },
+  { name: 'UNOPS', url: 'https://powergen-renewable-energy.com/wp-content/uploads/2025/07/unops-logo-1.webp' },
+  { name: 'USAID', url: 'https://powergen-renewable-energy.com/wp-content/uploads/2025/07/usaid-logo-1.webp' },
+  { name: 'Unilever', url: 'https://powergen-renewable-energy.com/wp-content/uploads/2025/07/unilever-logo-copy.jpg' },
+  { name: 'Shell', url: 'https://powergen-renewable-energy.com/wp-content/uploads/2025/07/shell-logo-1-e1751688825567.png' },
+  { name: 'E.ON Energy', url: 'https://powergen-renewable-energy.com/wp-content/uploads/2025/07/eon-enegry-logo.jpg' },
+  { name: 'SparkMeter', url: 'https://powergen-renewable-energy.com/wp-content/uploads/2025/07/spark-meter-logo.jpg' },
+  { name: 'SolarCentury', url: 'https://powergen-renewable-energy.com/wp-content/uploads/2025/07/solar-century-logo-1.png' },
+  { name: 'Green Mini Grid', url: 'https://powergen-renewable-energy.com/wp-content/uploads/2025/07/green-mini-grid-logo.jpg' },
+  { name: 'AMDA', url: 'https://powergen-renewable-energy.com/wp-content/uploads/2025/07/amda-logo.jpg' },
+  { name: 'AECF', url: 'https://powergen-renewable-energy.com/wp-content/uploads/2025/07/aecf-logo.jpg' },
+  { name: 'DFID', url: 'https://powergen-renewable-energy.com/wp-content/uploads/2025/07/department-for-international-development-logo-1.jpg' },
+  { name: 'SteamaCo', url: 'https://powergen-renewable-energy.com/wp-content/uploads/2025/07/steama-logo.jpg' },
+  { name: 'Power Africa', url: 'https://powergen-renewable-energy.com/wp-content/uploads/2025/07/power-africa-logo-1.png' },
+  { name: 'World Bank Group', url: 'https://powergen-renewable-energy.com/wp-content/uploads/2025/07/world-bank-group-logo-1.webp' },
+  { name: 'REPP', url: 'https://powergen-renewable-energy.com/wp-content/uploads/2025/07/renewable-energy-performance-platform-logo.png' },
+  { name: 'Forbes', url: 'https://powergen-renewable-energy.com/wp-content/uploads/2025/07/forbes-logo.jpg' },
+  { name: 'TED', url: 'https://powergen-renewable-energy.com/wp-content/uploads/2025/07/ted-logo-1.png' },
+  { name: 'GTM', url: 'https://powergen-renewable-energy.com/wp-content/uploads/2025/07/gtm-logo.jpg' },
+  { name: 'Kiva', url: 'https://powergen-renewable-energy.com/wp-content/uploads/2025/07/kiva-logo-1.png' },
+  { name: 'OPIC', url: 'https://powergen-renewable-energy.com/wp-content/uploads/2025/07/opic-logo-1.png' },
+  { name: 'Finlays', url: 'https://powergen-renewable-energy.com/wp-content/uploads/2025/07/finlays-logo.jpg' },
+  { name: 'USA Dept of State', url: 'https://powergen-renewable-energy.com/wp-content/uploads/2025/07/usa-department-of-state-logo-1.png' }
 ];
 
 export const Home: React.FC = () => {
   const { content } = useCms();
   const page = content.pages.home;
+  const brand = content.settings.brandName;
   const [isPlaying, setIsPlaying] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
+  const seo = (
+    <Seo
+      title={`${brand} — ${content.settings.tagline}`}
+      description={page.hero.subtitle}
+      image={page.hero.image}
+      path="/"
+      jsonLd={{
+        '@context': 'https://schema.org',
+        '@type': 'Organization',
+        name: brand,
+        description: content.settings.tagline,
+        email: content.settings.contactEmail,
+        address: content.settings.headquarters,
+        areaServed: content.settings.hubs,
+      }}
+    />
+  );
+
   if (page.blocks && page.blocks.length > 0) {
-    return <SiteRenderer blocks={page.blocks} globalStyles={page.globalStyles} />;
+    return (
+      <>
+        {seo}
+        <SiteRenderer blocks={page.blocks} globalStyles={page.globalStyles} />
+      </>
+    );
   }
 
   const handlePlayVideo = () => {
@@ -56,71 +104,124 @@ export const Home: React.FC = () => {
 
   return (
     <>
-      <section className="home-hero">
-        <div className="home-hero__image" style={{ backgroundImage: `url('${page.hero.image}')` }} />
-        <div className="home-hero__mesh" aria-hidden="true" />
-        <div className="container home-hero__inner">
-          <div className="home-hero__copy reveal">
-            <span className="kicker">PowerGen Renewable Energy</span>
-            <h1>{page.hero.title}</h1>
-            <p>{page.hero.subtitle}</p>
-            <div className="hero-actions">
-              <Link to="/services" className="btn btn-primary">Our Solutions</Link>
-              <Link to="/contact" className="btn btn-outline-white">Get in Touch</Link>
-            </div>
-          </div>
+      {seo}
 
-          <aside className="signal-panel reveal" data-delay="0.2" aria-label="Operational snapshot">
-            <div className="signal-panel__top">
-              <span>Live operating model</span>
-              <strong>Solar + BESS + local O&amp;M</strong>
-            </div>
-            <div className="signal-panel__scan" aria-hidden="true" />
-            <ul>
-              {fieldNotes.map((note) => (
-                <li key={note}>{note}</li>
-              ))}
-            </ul>
-          </aside>
-        </div>
-      </section>
+      {/* Static image hero with brand gradient overlay */}
+      <HomeHero title={page.hero.title} subtitle={page.hero.subtitle} image={page.hero.image} />
 
+      {/* ── Impact band ── */}
       <section className="impact-band">
         <div className="container impact-band__inner">
           <div className="impact-copy reveal">
             <span className="kicker">Measured capacity</span>
-            <h2>Proven impact across businesses and communities.</h2>
+            <h2 data-gsap="split-heading">Proven impact across businesses and communities.</h2>
+
+            {/* Strategic 3D Placement: Interactive BESS Battery Storage Cabinet */}
+            <div style={{ marginTop: '2rem', display: 'flex', alignItems: 'center', gap: '1.25rem', background: 'rgba(255,255,255,0.03)', padding: '1rem', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.06)' }}>
+              <div style={{ width: '80px', height: '80px', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '12px', background: 'rgba(124,189,36,0.12)', border: '1px solid rgba(124,189,36,0.3)', color: 'var(--accent-green)' }}>
+                <BadgeIcon type="battery" size={42} />
+              </div>
+              <div style={{ textAlign: 'left' }}>
+                <span style={{ fontSize: '0.75rem', color: 'var(--accent-green)', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1.5px' }}>24/7 Smart Storage</span>
+                <p style={{ margin: '0.2rem 0 0 0', fontSize: '0.8rem', color: 'rgba(255,255,255,0.65)', lineHeight: '1.4' }}>Integrated Lithium BESS systems buffering loads, cutting diesel, and securing uptime.</p>
+              </div>
+            </div>
           </div>
-          <div className="impact-grid">
-            <div className="impact-tile reveal">
-              <AnimatedCounter end={8.7} suffix=" MWp" decimals={1} />
-              <span>Solar installed</span>
+          <div className="impact-grid-premium">
+            <div className="impact-tile-premium reveal" data-gsap="counter-tile">
+              <div className="impact-tile-premium__header">
+                <div className="impact-tile-premium__icon">
+                  <Zap size={22} />
+                </div>
+                <div className="impact-tile-premium__led" />
+              </div>
+              <div className="impact-tile-premium__counter">
+                <AnimatedCounter end={34} suffix=" MW+ MWh" />
+              </div>
+              <div className="impact-tile-premium__footer">
+                <span className="impact-tile-premium__label">Capacity installed</span>
+                <span className="impact-tile-premium__detail">Solar &amp; battery storage</span>
+              </div>
             </div>
-            <div className="impact-tile reveal" data-delay="0.1">
-              <AnimatedCounter end={200} suffix="+" />
-              <span>Projects delivered</span>
+
+            <div className="impact-tile-premium reveal" data-delay="0.1" data-gsap="counter-tile">
+              <div className="impact-tile-premium__header">
+                <div className="impact-tile-premium__icon">
+                  <Cpu size={22} />
+                </div>
+                <div className="impact-tile-premium__led" />
+              </div>
+              <div className="impact-tile-premium__counter">
+                <AnimatedCounter end={325} suffix="+" />
+              </div>
+              <div className="impact-tile-premium__footer">
+                <span className="impact-tile-premium__label">Systems installed</span>
+                <span className="impact-tile-premium__detail">Across 12 countries</span>
+              </div>
             </div>
-            <div className="impact-tile reveal" data-delay="0.2">
-              <AnimatedCounter end={4} />
-              <span>Operating countries</span>
+
+            <div className="impact-tile-premium reveal" data-delay="0.2" data-gsap="counter-tile">
+              <div className="impact-tile-premium__header">
+                <div className="impact-tile-premium__icon">
+                  <ShieldCheck size={22} />
+                </div>
+                <div className="impact-tile-premium__led" />
+              </div>
+              <div className="impact-tile-premium__counter">
+                <AnimatedCounter end={99.9} suffix="%" decimals={1} />
+              </div>
+              <div className="impact-tile-premium__footer">
+                <span className="impact-tile-premium__label">Guaranteed uptime</span>
+                <span className="impact-tile-premium__detail">24/7 remote monitoring</span>
+              </div>
             </div>
-            <div className="impact-tile reveal" data-delay="0.3">
-              <AnimatedCounter end={30} suffix="k+" />
-              <span>Lives impacted</span>
+
+            <div className="impact-tile-premium reveal" data-delay="0.3" data-gsap="counter-tile">
+              <div className="impact-tile-premium__header">
+                <div className="impact-tile-premium__icon">
+                  <Globe size={22} />
+                </div>
+                <div className="impact-tile-premium__led" />
+              </div>
+              <div className="impact-tile-premium__counter">
+                <AnimatedCounter end={12} />
+              </div>
+              <div className="impact-tile-premium__footer">
+                <span className="impact-tile-premium__label">Countries delivered</span>
+                <span className="impact-tile-premium__detail">Operations in 4 countries</span>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
+      {/* ── Systems / operating modes ── */}
       <section className="systems-section">
         <div className="container">
-          <div className="section-intro reveal">
-            <span className="kicker">Two operating modes</span>
-            <h2>{page.sections.expertiseTitle}</h2>
-            <p>{page.sections.expertiseText}</p>
+          <div className="home-expertise-intro reveal">
+            <div>
+              <span className="kicker">Commercial &amp; Industrial Focus</span>
+              <h2 data-gsap="split-heading" style={{ fontSize: 'clamp(2rem, 3vw, 3rem)', marginTop: '0.5rem' }}>{page.sections.expertiseTitle}</h2>
+              <p style={{ marginTop: '1rem', fontSize: '0.95rem', color: 'var(--text-muted)' }}>{page.sections.expertiseText}</p>
+            </div>
+            {/* Strategic 3D Placements: Interactive Floating Badges */}
+            <div className="home-expertise-intro-badges">
+              <div style={{ width: '130px', height: '130px', background: 'var(--bg-white)', border: '1px solid var(--border-color)', borderRadius: '8px', boxShadow: 'var(--shadow-sm)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '0.5rem' }}>
+                <span style={{ width: '64px', height: '64px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', background: 'var(--accent-green-alpha)', color: 'var(--accent-green)' }}>
+                  <BadgeIcon type="solar" size={36} />
+                </span>
+                <span style={{ fontSize: '0.68rem', color: 'var(--text-main)', fontWeight: '700', textTransform: 'uppercase', marginTop: '0.6rem', letterSpacing: '0.5px' }}>C&I Solar</span>
+              </div>
+              <div style={{ width: '130px', height: '130px', background: 'var(--bg-white)', border: '1px solid var(--border-color)', borderRadius: '8px', boxShadow: 'var(--shadow-sm)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '0.5rem' }}>
+                <span style={{ width: '64px', height: '64px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', background: 'var(--accent-green-alpha)', color: 'var(--accent-green)' }}>
+                  <BadgeIcon type="battery" size={36} />
+                </span>
+                <span style={{ fontSize: '0.68rem', color: 'var(--text-main)', fontWeight: '700', textTransform: 'uppercase', marginTop: '0.6rem', letterSpacing: '0.5px' }}>BESS Storage</span>
+              </div>
+            </div>
           </div>
 
-          <div className="system-stack">
+          <div className="system-stack" data-gsap="stagger-cards">
             {operatingModes.map((mode, index) => (
               <article className="system-panel reveal" data-delay={`0.${index + 1}`} key={mode.title}>
                 <div className="system-panel__media">
@@ -144,7 +245,9 @@ export const Home: React.FC = () => {
         </div>
       </section>
 
-      <section className="operations-section" id="operations-map">
+      {/* ── Operations map (dark) – with energy particles ── */}
+      <section className="operations-section" id="operations-map" style={{ position: 'relative' }}>
+        <EnergyParticles />
         <div className="container">
           <div className="section-intro section-intro--dark reveal">
             <span className="kicker">Operations network</span>
@@ -155,11 +258,15 @@ export const Home: React.FC = () => {
         </div>
       </section>
 
+      {/* ── Interactive 3D system anatomy explainer ── */}
+      <SystemAnatomy />
+
+      {/* ── Evidence / field impact ── */}
       <section className="evidence-section" id="measured-impact">
         <div className="container evidence-layout">
           <div className="evidence-copy reveal">
             <span className="kicker">Field evidence</span>
-            <h2>{page.sections.impactTitle}</h2>
+            <h2 data-gsap="split-heading">{page.sections.impactTitle}</h2>
             <p>{page.sections.impactText}</p>
             <Link to="/about" className="btn btn-secondary">Understand the company</Link>
           </div>
@@ -177,16 +284,29 @@ export const Home: React.FC = () => {
         </div>
       </section>
 
+      {/* ── Partners ── */}
       <section className="partners-section partners-section--redesigned">
         <div className="container">
           <h3>Institutional partners and platform backers</h3>
           <div className="partners-track">
             <div className="partners-list">
-              {['ACCENTURE', 'CAMCO', 'EEP AFRICA', 'ENGIE', 'INFRACO', 'EDFI', 'PHILIPS', 'UNOPS', 'USAID'].map((p) => (
-                <span key={p} className="partner-logo">{p}</span>
+              {partnerLogos.map((p) => (
+                <img
+                  key={p.name}
+                  src={p.url}
+                  alt={p.name}
+                  className="partner-logo-img"
+                  loading="lazy"
+                />
               ))}
-              {['ACCENTURE', 'CAMCO', 'EEP AFRICA', 'ENGIE', 'INFRACO', 'EDFI', 'PHILIPS', 'UNOPS', 'USAID'].map((p) => (
-                <span key={`dup-${p}`} className="partner-logo">{p}</span>
+              {partnerLogos.map((p) => (
+                <img
+                  key={`dup-${p.name}`}
+                  src={p.url}
+                  alt={p.name}
+                  className="partner-logo-img"
+                  loading="lazy"
+                />
               ))}
             </div>
           </div>

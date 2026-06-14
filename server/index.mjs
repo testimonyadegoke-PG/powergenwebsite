@@ -68,8 +68,9 @@ const defaultContent = {
   footerLinks: [
     { id: 'privacy', label: 'Privacy Policy', path: '#privacy', visible: true },
     { id: 'terms', label: 'Terms of Use', path: '#terms', visible: true },
-    { id: 'hses', label: 'HSES Manual', path: '#compliance', visible: true },
-    { id: 'helpline', label: 'Global Helpline', path: '#compliance', visible: true },
+    { id: 'hses', label: 'HSES Manual', path: '#', visible: true },
+    { id: 'helpline', label: 'Global Helpline Form', path: '#', visible: true },
+    { id: 'helpline-fr', label: 'Global Helpline Form – French', path: '#', visible: true },
   ],
   pages: {
     home: {
@@ -433,6 +434,95 @@ const defaultContent = {
   applications: [],
   leads: [],
   subscribers: [],
+  forms: [
+    {
+      id: 'global-help-form-en',
+      title: 'Global Help Form',
+      description: 'Use this anonymous form to report compliance concerns, health & safety violations, or ethical issues. We take all reports seriously and will investigate thoroughly. If you choose to remain anonymous, your identity will be protected.',
+      fields: [
+        { id: 'location', label: 'Where are you located?', type: 'select', required: true, options: ['Sierra Leone', 'Kenya', 'DR Congo', 'Nigeria', 'United States', 'Germany', 'Other'], placeholder: 'Select your location' },
+        { id: 'location_detail', label: 'If you selected Other, please specify your location:', type: 'text', required: false, placeholder: 'Enter details...' },
+        { id: 'event_location', label: 'Where did the event occur?', type: 'select', required: true, options: ['Sierra Leone', 'Kenya', 'DR Congo', 'Nigeria', 'United States', 'Germany', 'Other'], placeholder: 'Select location of event' },
+        {
+          id: 'issue_type',
+          label: 'What type of issue are you reporting?',
+          type: 'radio',
+          required: true,
+          options: [
+            'Health & Safety: Concerns regarding company activities affecting safety/health/environment.',
+            'Human Rights: Concerns affecting human rights or general well-being of communities.',
+            'Harassment: Humiliating, intimidating, offensive, hostile, or unsolicited conduct.',
+            'Equal Opportunity: Unfair hiring, promotions, wages, or discipline based on discrimination.',
+            'IT & Communication: Sharing login details, pornographic material, or personal business on IT.',
+            'Asset Protection: Waste, loss, theft, damage, or misuse of financial or physical assets.',
+            'Data Privacy: Failure to protect personal data privacy.',
+            'Intellectual Property: Misuse of PowerGen or other intellectual property.',
+            'Information & Records Management: Non-compliance with information and records management standards.',
+            'Disclosure & Commercial Communication: Unauthorized disclosure of commercial activity.',
+            'Anti-Bribery & Corruption: Offering or paying money/benefits to secure commercial advantages.',
+            'Gifts & Hospitality: Accepting or giving gifts exceeding policy limits.',
+            'Conflicts of Interest: Personal relationships or interests influencing business decisions.',
+            'Anti-Money Laundering: Laundering crime proceeds in commercial transactions.',
+            'Political Activity & Payments: Payments made by or on behalf of PowerGen to political parties.',
+            'Antitrust: Behavior limiting trade or restricting fair competition (e.g. price fixing).',
+            'Trade Compliance: Non-compliance with trade regulations.',
+            'Accounting & Audit: Non-compliance with audit, financial disclosure, or accounting rules.',
+            'Other'
+          ]
+        },
+        { id: 'other_detail', label: 'If you selected Other, please specify:', type: 'text', required: false, placeholder: 'Specify issue type...' },
+        { id: 'description', label: 'What happened? Describe the incident in detail.', type: 'textarea', required: true, placeholder: 'Describe what, when, where, and how it happened...' },
+        { id: 'relation', label: 'What is your relationship with PowerGen?', type: 'select', required: true, options: ['PowerGen Employee', 'PowerGen Contract Staff', 'Contractor / Subcontractor', 'Other third party / public', 'Prefer not to say / Don\'t know'], placeholder: 'Select relationship' },
+        { id: 'involved', label: 'Who was involved? Share the name, title, and role of others involved.', type: 'textarea', required: true, placeholder: 'Enter names, titles, and roles...' },
+        { id: 'contact_info', label: 'Providing your name makes it easier to follow up. (Optional)', type: 'text', required: false, placeholder: 'Enter your name and contact info (email/phone)...' },
+        { id: 'can_contact', label: 'Can we contact you?', type: 'radio', required: true, options: ['Yes', 'No'] }
+      ]
+    },
+    {
+      id: 'global-help-form-fr',
+      title: 'Formulaire d’Aide Global de PowerGen',
+      description: 'Utilisez ce formulaire anonyme pour signaler une suspicion, une préoccupation ou une connaissance d\'un problème de conformité. Signaler et traiter les violations présumées de la loi ou des principes commerciaux de PowerGen (PGBP) est d\'une importance cruciale pour protéger notre réputation. Il vous sera demandé de décliner votre identité afin que votre demande puisse être traitée le plus efficacement possible, mais les rapports anonymes seront acceptés.',
+      fields: [
+        { id: 'location', label: 'Où êtes-vous situé ?', type: 'select', required: true, options: ['Sierra Leone', 'Kenya', 'République Démocratique du Congo', 'Nigeria', 'États-Unis', 'Allemagne', 'Autre'], placeholder: 'Choisissez votre emplacement' },
+        { id: 'location_detail', label: 'Si vous avez choisi Autre, veuillez spécifier :', type: 'text', required: false, placeholder: 'Détails...' },
+        { id: 'event_location', label: 'Où s\'est déroulé l\'événement pour lequel vous nous contactez ?', type: 'select', required: true, options: ['Sierra Leone', 'Kenya', 'République Démocratique du Congo', 'Nigeria', 'États-Unis', 'Allemagne', 'Autre'], placeholder: 'Choisissez le lieu de l\'événement' },
+        {
+          id: 'issue_type',
+          label: 'Quel type de problème signalez-vous ?',
+          type: 'radio',
+          required: true,
+          options: [
+            'Santé et sécurité : Préoccupations concernant les activités de l\'entreprise qui affectent la santé/sécurité/sûreté.',
+            'Droits de l\'homme : Préoccupations liées aux activités affectant les droits de l\'homme ou le bien-être général.',
+            'Harcèlement : Action, conduite ou comportement humiliant, intimidant, offensant ou hostile.',
+            'Égalité des chances : Décisions d\'emploi (embauche, promotion, etc.) non fondées uniquement sur des facteurs objectifs.',
+            'Informatique et communication : Non-respect des exigences de sécurité informatique (partage de connexion, pornographie, etc.).',
+            'Protection des actifs : Gaspillage, loss, dommage, vol ou utilisation abusive des actifs financiers ou physiques.',
+            'Confidentialité des données : Non-protection des données personnelles.',
+            'Propriété intellectuelle : Utilisation abusive de la propriété intellectuelle.',
+            'Gestion de l\'information et des dossiers : Non-respect des normes de gestion de l\'information.',
+            'Divulgation et communication commerciale : Divulgation non autorisée d\'activités commerciales.',
+            'Lutte contre les pots-de-vin et la corruption : Offre ou paiement d\'argent pour un avantage commercial inopportun.',
+            'Cadeaux et hospitalité : Cadeaux acceptés dépassant les limites de la police.',
+            'Conflits d\'intérêts : Relations personnelles ou activités influençant les décisions.',
+            'Lutte contre le blanchiment d\'argent : Blanchiment d\'argent ou transactions dissimulées.',
+            'Activité politique et paiements : Paiements effectués à des partis politiques.',
+            'Antitrust : Comportement limitant le commerce ou restreignant la concurrence (fixation des prix).',
+            'Conformité commerciale : Non-respect des réglementations sur la conformité commerciale.',
+            'Questions de comptabilité et d\'audit : Non-respect des exigences financières.',
+            'Autre'
+          ]
+        },
+        { id: 'other_detail', label: 'Si vous avez choisi Autre, veuillez spécifier :', type: 'text', required: false, placeholder: 'Spécifiez le type de problème...' },
+        { id: 'description', label: 'Que s\'est-il passé ? Décrivez l\'incident de la manière la plus détaillée possible.', type: 'textarea', required: true, placeholder: 'Décrivez ce qui s\'est passé, quand, où...' },
+        { id: 'relation', label: 'Quelle est votre relation avec PowerGen ?', type: 'select', required: true, options: ['Employé(e) de PowerGen', 'Personnel contractuel de PowerGen', 'Contractant / Sous-traitant', 'Autre tiers / public', 'Ne souhaite pas donner mon identité / Ne sait pas'], placeholder: 'Sélectionnez votre relation' },
+        { id: 'involved', label: 'Qui était impliqué ? Partagez le nom, le titre et le rôle des autres personnes impliquées.', type: 'textarea', required: true, placeholder: 'Indiquez les noms, titres et rôles...' },
+        { id: 'contact_info', label: 'En vous identifiant, il nous sera plus facile de suivre l\'incident. (Facultatif)', type: 'text', required: false, placeholder: 'Indiquez votre nom et vos coordonnées...' },
+        { id: 'can_contact', label: 'Pouvons-nous vous contacter ?', type: 'radio', required: true, options: ['Oui', 'Non'] }
+      ]
+    }
+  ],
+  formSubmissions: [],
 };
 
 async function loadContent() {
@@ -474,6 +564,14 @@ async function loadContent() {
           }
         }
       }
+    }
+    if (!content.forms) {
+      content.forms = defaultContent.forms || [];
+      changed = true;
+    }
+    if (!content.formSubmissions) {
+      content.formSubmissions = defaultContent.formSubmissions || [];
+      changed = true;
     }
     if (changed) await saveContent(content);
     return content;
@@ -613,6 +711,24 @@ async function route(req, res) {
     content.leads.unshift(lead);
     await saveContent(content);
     return sendJson(res, 201, lead);
+  }
+
+  const formSubmissionsMatch = url.pathname.match(/^\/api\/forms\/([^/]+)\/submissions$/);
+  if (req.method === 'POST' && formSubmissionsMatch) {
+    const formId = formSubmissionsMatch[1];
+    const body = await readBody(req);
+    const submission = {
+      id: randomUUID(),
+      formId,
+      data: body,
+      createdAt: new Date().toISOString()
+    };
+    if (!content.formSubmissions) {
+      content.formSubmissions = [];
+    }
+    content.formSubmissions.unshift(submission);
+    await saveContent(content);
+    return sendJson(res, 201, submission);
   }
 
   if (req.method === 'POST' && url.pathname === '/api/newsletter') {

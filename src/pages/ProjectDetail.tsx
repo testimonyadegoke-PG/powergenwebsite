@@ -1,6 +1,7 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useCms } from '../cms/useCms';
+import { Seo } from '../components/Seo';
 
 export const ProjectDetail: React.FC = () => {
   const { content } = useCms();
@@ -19,6 +20,13 @@ export const ProjectDetail: React.FC = () => {
 
   return (
     <div className="project-detail-wrapper">
+      <Seo
+        title={`${project.title} — ${content.settings.brandName}`}
+        description={project.shortDesc}
+        image={project.image}
+        path={`/projects/${project.id}`}
+        type="article"
+      />
       {/* Cinematic Hero */}
       <section className="hero sub-hero" style={{ backgroundImage: `url('${project.image}')`, minHeight: '55vh' }}>
         <div className="container">
@@ -101,38 +109,32 @@ export const ProjectDetail: React.FC = () => {
         </div>
       </section>
 
-      {/* System Architecture */}
-      <section style={{ backgroundColor: 'var(--primary-dark)', padding: '5rem 0' }}>
-        <div className="container" style={{ textAlign: 'center' }}>
-          <div className="reveal">
-            <span className="tag" style={{ color: 'var(--accent-green)' }}>System Architecture</span>
-            <h2 style={{ color: '#fff', marginBottom: '3rem' }}>Energy Flow Diagram</h2>
-            <svg viewBox="0 0 800 200" style={{ width: '100%', maxWidth: '700px', height: 'auto' }}>
-              {/* Nodes */}
-              <rect x="20" y="60" width="140" height="80" rx="12" fill="rgba(255,255,255,0.06)" stroke="rgba(124,189,36,0.3)" strokeWidth="1.5"/>
-              <text x="90" y="95" fill="#7cbd24" fontSize="11" textAnchor="middle" fontWeight="700">SOLAR ARRAY</text>
-              <text x="90" y="115" fill="rgba(255,255,255,0.5)" fontSize="10" textAnchor="middle">PV Generation</text>
-
-              <rect x="230" y="60" width="140" height="80" rx="12" fill="rgba(255,255,255,0.06)" stroke="rgba(124,189,36,0.3)" strokeWidth="1.5"/>
-              <text x="300" y="95" fill="#7cbd24" fontSize="11" textAnchor="middle" fontWeight="700">INVERTER</text>
-              <text x="300" y="115" fill="rgba(255,255,255,0.5)" fontSize="10" textAnchor="middle">DC → AC</text>
-
-              <rect x="440" y="60" width="140" height="80" rx="12" fill="rgba(255,255,255,0.06)" stroke="rgba(124,189,36,0.3)" strokeWidth="1.5"/>
-              <text x="510" y="95" fill="#7cbd24" fontSize="11" textAnchor="middle" fontWeight="700">BESS</text>
-              <text x="510" y="115" fill="rgba(255,255,255,0.5)" fontSize="10" textAnchor="middle">Battery Storage</text>
-
-              <rect x="650" y="60" width="130" height="80" rx="12" fill="rgba(255,255,255,0.06)" stroke="rgba(124,189,36,0.3)" strokeWidth="1.5"/>
-              <text x="715" y="95" fill="#7cbd24" fontSize="11" textAnchor="middle" fontWeight="700">CUSTOMERS</text>
-              <text x="715" y="115" fill="rgba(255,255,255,0.5)" fontSize="10" textAnchor="middle">Utility Grid</text>
-
-              {/* Flow lines */}
-              <line x1="160" y1="100" x2="230" y2="100" stroke="#7cbd24" strokeWidth="2" strokeDasharray="6 4" className="energy-flow-line"/>
-              <line x1="370" y1="100" x2="440" y2="100" stroke="#7cbd24" strokeWidth="2" strokeDasharray="6 4" className="energy-flow-line"/>
-              <line x1="580" y1="100" x2="650" y2="100" stroke="#7cbd24" strokeWidth="2" strokeDasharray="6 4" className="energy-flow-line"/>
-            </svg>
+      {/* Project Gallery */}
+      {project.gallery && project.gallery.length > 0 && (
+        <section style={{ backgroundColor: 'var(--bg-white)', padding: '6rem 0', borderTop: '1px solid var(--linework)' }}>
+          <div className="container">
+            <div className="section-header reveal" style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
+              <span className="tag">Project Gallery</span>
+              <h2>On-Site Visual Documentation</h2>
+              <p>Visual highlights of the solar installation, BESS battery storage, and system commissioning.</p>
+            </div>
+            
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '2rem' }}>
+              {project.gallery.map((imgUrl, index) => (
+                <div key={index} className="gallery-card reveal" style={{ borderRadius: '6px', overflow: 'hidden', border: '1px solid rgba(16, 20, 17, 0.08)', boxShadow: '0 4px 15px rgba(16,20,17,0.02)', height: '240px', background: '#f8fafc' }}>
+                  <img 
+                    src={imgUrl} 
+                    alt={`${project.title} - documentation ${index + 1}`} 
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.5s ease' }}
+                    onMouseOver={(e) => { e.currentTarget.style.transform = 'scale(1.05)' }}
+                    onMouseOut={(e) => { e.currentTarget.style.transform = 'scale(1)' }}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* CTA */}
       <section className="cta-banner">

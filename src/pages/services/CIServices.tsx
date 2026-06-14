@@ -3,17 +3,33 @@ import { Link } from 'react-router-dom';
 import { ProjectCycle } from '../../components/ProjectCycle';
 import { useCms } from '../../cms/useCms';
 import { SiteRenderer } from '../../cms/sitebuilder/renderer';
+import { Seo } from '../../components/Seo';
 
 export const CIServices: React.FC = () => {
   const { content } = useCms();
   const page = content.pages.ciServices;
 
+  const seo = (
+    <Seo
+      title={`${page.hero.title} — ${content.settings.brandName}`}
+      description={page.hero.subtitle}
+      image={page.hero.image}
+      path="/services/c-i"
+    />
+  );
+
   if (page.blocks && page.blocks.length > 0) {
-    return <SiteRenderer blocks={page.blocks} globalStyles={page.globalStyles} />;
+    return (
+      <>
+        {seo}
+        <SiteRenderer blocks={page.blocks} globalStyles={page.globalStyles} />
+      </>
+    );
   }
 
   return (
     <div className="service-page-wrapper">
+      {seo}
       {/* C&I Hero */}
       <section className="hero sub-hero" style={{ backgroundImage: `url('${page.hero.image}')` }}>
         <div className="container">
@@ -49,7 +65,6 @@ export const CIServices: React.FC = () => {
       <section className="cycle-section" id="project-cycle">
         <div className="container">
           <div className="section-header reveal">
-            <span className="tag" style={{ color: 'var(--accent-green)' }}>Our Methodology</span>
             <h2>Our Project Development Cycle</h2>
             <p>We manage every stage of the infrastructure process to guarantee performance levels and remove implementation hurdles.</p>
           </div>

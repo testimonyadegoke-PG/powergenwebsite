@@ -26,18 +26,41 @@ export const Footer: React.FC = () => {
         <div className="footer-col">
           <h4>Quick Links</h4>
           <ul className="footer-links">
-            {mainLinks.map((item) => (
-              <li key={item.id}><Link to={item.path}>{item.label}</Link></li>
-            ))}
+            {mainLinks.map((item) => {
+              if (item.children && item.children.length > 0) {
+                return (
+                  <React.Fragment key={item.id}>
+                    <li><Link to={item.path}>{item.label}</Link></li>
+                    {item.children.map((child) => (
+                      <li key={child.id} style={{ paddingLeft: '0.8rem', fontSize: '0.85rem', opacity: 0.8 }}>
+                        <Link to={child.path}>&bull; {child.label}</Link>
+                      </li>
+                    ))}
+                  </React.Fragment>
+                );
+              }
+              return (
+                <li key={item.id}><Link to={item.path}>{item.label}</Link></li>
+              );
+            })}
           </ul>
         </div>
 
         <div className="footer-col">
           <h4>Compliance & Ethics</h4>
           <ul className="footer-links">
-            {footerLinks.map((item) => (
-              <li key={item.id}><a href={item.path}>{item.label}</a></li>
-            ))}
+            {footerLinks.map((item) => {
+              const isInternal = item.path.startsWith('/');
+              return (
+                <li key={item.id}>
+                  {isInternal ? (
+                    <Link to={item.path}>{item.label}</Link>
+                  ) : (
+                    <a href={item.path}>{item.label}</a>
+                  )}
+                </li>
+              );
+            })}
           </ul>
         </div>
 

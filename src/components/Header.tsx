@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { useCms } from '../cms/useCms';
-import { designModes, type DesignModeId } from '../design/designModes';
-import { useDesignMode } from '../design/useDesignMode';
 
 export const Header: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
   const [menuActive, setMenuActive] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const { content } = useCms();
-  const { mode, setMode, activeMode } = useDesignMode();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -17,27 +14,34 @@ export const Header: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const closeMenu = () => { setMenuActive(false); setDropdownOpen(false); };
+  const closeMenu = () => { setMenuActive(false); setActiveDropdown(null); };
 
   return (
     <header className={`header ${scrolled ? 'scrolled' : ''}`}>
+      <div className="header-status-bar" aria-hidden="true" />
       <div className="nav-container">
-        <Link to="/" className="logo" onClick={closeMenu}>
-          {content.settings.brandName}
-          <span className="logo-dot"></span>
+        <Link to="/" className="logo" onClick={closeMenu} style={{ display: 'flex', alignItems: 'center' }}>
+          {content.settings.logoUrl ? (
+            <img src={content.settings.logoUrl} alt={content.settings.brandName} className="logo-img" style={{ maxHeight: '35px' }} />
+          ) : (
+            <>
+              {content.settings.brandName}
+              <span className="logo-dot"></span>
+            </>
+          )}
         </Link>
 
         <ul className={`nav-links ${menuActive ? 'active' : ''}`} id="nav-links">
           {content.navigation
-            .filter((item) => item.visible)
+            .filter((item) => item.visible && item.id !== 'contact')
             .map((item) => {
               if (item.children && item.children.filter((c) => c.visible).length > 0) {
                 return (
                   <li
                     className="dropdown-li"
                     key={item.id}
-                    onMouseEnter={() => setDropdownOpen(true)}
-                    onMouseLeave={() => setDropdownOpen(false)}
+                    onMouseEnter={() => setActiveDropdown(item.id)}
+                    onMouseLeave={() => setActiveDropdown(null)}
                   >
                     <NavLink
                       to={item.path}
@@ -45,7 +49,7 @@ export const Header: React.FC = () => {
                       onClick={(e) => {
                         if (window.innerWidth <= 768) {
                           e.preventDefault();
-                          setDropdownOpen(!dropdownOpen);
+                          setActiveDropdown(activeDropdown === item.id ? null : item.id);
                         } else {
                           closeMenu();
                         }
@@ -53,7 +57,7 @@ export const Header: React.FC = () => {
                     >
                       {item.label} <span className="dropdown-arrow">▼</span>
                     </NavLink>
-                    <ul className={`dropdown-menu ${dropdownOpen ? 'show' : ''}`}>
+                    <ul className={`dropdown-menu ${activeDropdown === item.id ? 'show' : ''}`}>
                       {item.children
                         .filter((child) => child.visible)
                         .map((child) => (
@@ -64,16 +68,6 @@ export const Header: React.FC = () => {
                           </li>
                         ))}
                     </ul>
-                  </li>
-                );
-              }
-
-              if (item.id === 'contact') {
-                return (
-                  <li key={item.id}>
-                    <Link to={item.path} className="btn btn-primary nav-btn" onClick={closeMenu}>
-                      {item.label}
-                    </Link>
                   </li>
                 );
               }
@@ -91,20 +85,17 @@ export const Header: React.FC = () => {
                 </li>
               );
             })}
-        </ul>
 
-        <div className="design-switcher" title={activeMode.perspective}>
-          <span>Design</span>
-          <select
-            value={mode}
-            onChange={(event) => setMode(event.target.value as DesignModeId)}
-            aria-label="Choose website design direction"
-          >
-            {designModes.map((item) => (
-              <option value={item.id} key={item.id}>{item.shortName}</option>
+          {content.navigation
+            .filter((item) => item.visible && item.id === 'contact')
+            .map((item) => (
+              <li key={item.id}>
+                <Link to={item.path} className="btn btn-primary nav-btn" onClick={closeMenu}>
+                  {item.label}
+                </Link>
+              </li>
             ))}
-          </select>
-        </div>
+        </ul>
 
         <div className="menu-toggle" id="menu-toggle" onClick={() => setMenuActive(!menuActive)} aria-label="Toggle navigation menu">
           <span style={{ transform: menuActive ? 'rotate(45deg) translate(6px, 6px)' : 'none' }}></span>

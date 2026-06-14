@@ -36,8 +36,11 @@ function readOfflineContent(): CmsContent {
             parsed.pages[pageId].id = pageId;
             changed = true;
           }
-          if (!parsed.pages[pageId].blocks) {
-            parsed.pages[pageId].blocks = defaultContent.pages[pageId].blocks || [];
+          // Always sync blocks from defaultContent — if default is empty, clear stored blocks
+          const defaultBlocks = defaultContent.pages[pageId].blocks || [];
+          const storedBlocks = parsed.pages[pageId].blocks || [];
+          if (!parsed.pages[pageId].blocks || (defaultBlocks.length === 0 && storedBlocks.length > 0)) {
+            parsed.pages[pageId].blocks = defaultBlocks;
             changed = true;
           }
           if (!parsed.pages[pageId].globalStyles) {
@@ -70,6 +73,8 @@ function readOfflineContent(): CmsContent {
     if (!parsed.subscribers) { parsed.subscribers = defaultContent.subscribers; changed = true; }
     if (!parsed.applications) { parsed.applications = defaultContent.applications; changed = true; }
     if (!parsed.settings) { parsed.settings = defaultContent.settings; changed = true; }
+    if (!parsed.forms) { parsed.forms = defaultContent.forms; changed = true; }
+    if (!parsed.formSubmissions) { parsed.formSubmissions = defaultContent.formSubmissions || []; changed = true; }
 
     if (changed) {
       writeOfflineContent(parsed);
@@ -248,3 +253,26 @@ export async function uploadMediaFile(file: File): Promise<{ url: string; mediaI
     reader.onerror = (error) => reject(error);
   });
 }
+
+export async function submitFormResponse(formId: string, data: Record<string, any>): Promise<any> {
+  if (!AUTO_CONNECT_CMS) {
+    const content = readOfflineContent();
+    const record = {
+      id: makeId(),
+      formId,
+      data,
+      createdAt: new Date().toISOString(),
+    };
+    writeOfflineContent({
+      ...content,
+      formSubmissions: [record, ...content.formSubmissions],
+    });
+    return record;
+  }
+
+  return request<any>(`/api/forms/${formId}/submissions`, {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+}
+

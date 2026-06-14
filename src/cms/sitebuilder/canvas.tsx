@@ -28,25 +28,17 @@ export const Canvas: React.FC<CanvasProps> = ({ zoom }) => {
   const firstBlockVariant = blocks[0]?.props?.variant || 1;
   const variantMap: Record<number, string> = {
     1: 'default',
-    2: 'brutalist',
-    3: 'cyberpunk',
-    4: 'glassmorphic',
-    5: 'editorial',
-    6: 'minimalist',
-    7: 'retro',
-    8: 'kinetic',
-    9: 'organic',
-    10: 'blueprint',
-    11: 'swiss',
-    12: 'bauhaus',
-    13: 'neumorph',
-    14: 'luxe',
-    15: 'botanical',
-    16: 'isometric',
-    17: 'newsprint',
-    18: 'pulse',
-    19: 'dataops',
-    20: 'claymorph'
+    2: 'agri',
+    3: 'ev',
+    4: 'microgrid',
+    5: 'pioneer',
+    6: 'hydrogen',
+    7: 'bess',
+    8: 'corporate-a',
+    9: 'corporate-b',
+    10: 'corporate-c',
+    11: 'corporate-d',
+    12: 'corporate-e'
   };
   const activeLayoutClass = variantMap[Number(firstBlockVariant)] || 'default';
 

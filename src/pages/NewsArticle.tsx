@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useCms } from '../cms/useCms';
+import { Seo } from '../components/Seo';
 
 export const NewsArticle: React.FC = () => {
   const { content } = useCms();
@@ -28,9 +29,27 @@ export const NewsArticle: React.FC = () => {
   }
 
   const otherArticles = content.news.filter((item) => item.id !== id);
+  const summary = article.pullQuote || article.paragraphs[0] || '';
 
   return (
     <div className="news-article-wrapper">
+      <Seo
+        title={`${article.title} — ${content.settings.brandName}`}
+        description={summary}
+        image={article.image}
+        path={`/news/${article.id}`}
+        type="article"
+        jsonLd={{
+          '@context': 'https://schema.org',
+          '@type': 'NewsArticle',
+          headline: article.title,
+          datePublished: article.date,
+          author: { '@type': 'Person', name: article.author },
+          image: article.image,
+          publisher: { '@type': 'Organization', name: content.settings.brandName },
+          articleSection: article.tag,
+        }}
+      />
       <div
         style={{
           position: 'fixed',
@@ -81,22 +100,6 @@ export const NewsArticle: React.FC = () => {
             </div>
 
             <div className="reveal" style={{ transitionDelay: '0.2s' }}>
-              <div className="map-details-card" style={{ marginBottom: '2.5rem' }}>
-                <div className="map-details-header">
-                  <h3>About the Author</h3>
-                  <span className="map-tag">EDITORIAL</span>
-                </div>
-                <div className="map-details-body" style={{ padding: '2rem' }}>
-                  <h4 style={{ fontSize: '1.1rem', marginBottom: '0.2rem' }}>{article.author}</h4>
-                  <p style={{ fontSize: '0.8rem', color: 'var(--accent-green)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '1rem' }}>
-                    {article.authorTitle}
-                  </p>
-                  <p style={{ fontSize: '0.85rem', lineHeight: '1.5' }}>
-                    Oversees institutional reports, telemetry dashboards documentation, and market updates for PowerGen hubs.
-                  </p>
-                </div>
-              </div>
-
               <div className="map-details-card">
                 <div className="map-details-header" style={{ backgroundColor: 'var(--primary-light)' }}>
                   <h3>Related Updates</h3>

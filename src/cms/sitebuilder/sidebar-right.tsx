@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { useEditorStore } from './editor-store';
 import { BLOCK_DEFINITIONS } from './registry';
 import { uploadMediaFile } from '../api';
@@ -188,7 +188,7 @@ export const SidebarRight: React.FC = () => {
                 value={props.variant || 1}
                 onChange={(e) => handlePropChange('variant', parseInt(e.target.value) || 1)}
               >
-                {Array.from({ length: 20 }, (_, i) => i + 1).map((v) => (
+                {Array.from({ length: 12 }, (_, i) => i + 1).map((v) => (
                   <option key={v} value={v}>Variant {v}</option>
                 ))}
               </select>

@@ -2,12 +2,12 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { PenTool, Sun, Moon, ChevronRight } from 'lucide-react';
 import { fetchAdminContent, loginCms, saveCmsContent, uploadMediaFile } from '../../cms/api';
 import { defaultContent } from '../../cms/defaultContent';
-import type { CmsContent, CmsJob, CmsMediaItem, CmsNavItem } from '../../cms/types';
+import type { CmsContent, CmsJob, CmsMediaItem, CmsNavItem, CmsForm, CmsFormField } from '../../cms/types';
 import type { NewsArticleModel } from '../../data/newsData';
 import type { ProjectModel } from '../../data/projectsData';
 import { PageBuilder } from '../../cms/sitebuilder/editor';
 
-type AdminTab = 'overview' | 'pages' | 'projects' | 'menus' | 'news' | 'jobs' | 'media' | 'submissions' | 'json';
+type AdminTab = 'overview' | 'pages' | 'projects' | 'menus' | 'news' | 'jobs' | 'media' | 'forms' | 'submissions' | 'json';
 
 const tabs: { id: AdminTab; label: string }[] = [
   { id: 'overview', label: 'Overview' },
@@ -17,6 +17,7 @@ const tabs: { id: AdminTab; label: string }[] = [
   { id: 'news', label: 'News & Blog' },
   { id: 'jobs', label: 'Recruitment' },
   { id: 'media', label: 'Media Library' },
+  { id: 'forms', label: 'Form Builder' },
   { id: 'submissions', label: 'Submissions' },
   { id: 'json', label: 'Raw Backup JSON' },
 ];
@@ -82,6 +83,13 @@ const blankProject: ProjectModel = {
   }
 };
 
+const blankForm: CmsForm = {
+  id: '',
+  title: '',
+  description: '',
+  fields: []
+};
+
 function slug(value: string) {
   return value.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || crypto.randomUUID();
 }
@@ -111,6 +119,8 @@ export const AdminDashboard: React.FC = () => {
   const [selectedJobId, setSelectedJobId] = useState(defaultContent.jobs[0]?.id || '');
   const [selectedMediaId, setSelectedMediaId] = useState(defaultContent.media[0]?.id || '');
   const [selectedProjectId, setSelectedProjectId] = useState(defaultContent.projects?.[0]?.id || '');
+  const [selectedFormId, setSelectedFormId] = useState<string>('global-help-form-en');
+  const [selectedSubmissionsFormId, setSelectedSubmissionsFormId] = useState<string>('global-help-form-en');
   const [builderJson, setBuilderJson] = useState(JSON.stringify(defaultContent, null, 2));
   const [status, setStatus] = useState('');
   const [showBuilder, setShowBuilder] = useState(false);
@@ -121,6 +131,7 @@ export const AdminDashboard: React.FC = () => {
   const selectedJob = content.jobs.find((job) => job.id === selectedJobId) || blankJob;
   const selectedMedia = content.media.find((item) => item.id === selectedMediaId) || blankMedia;
   const selectedProject = content.projects?.find((project) => project.id === selectedProjectId) || blankProject;
+  const selectedForm = (content.forms || []).find((f) => f.id === selectedFormId) || blankForm;
 
   useEffect(() => {
     const handleStorageChange = () => {
@@ -386,6 +397,51 @@ export const AdminDashboard: React.FC = () => {
     const next = { ...content, media: exists ? content.media.map((item) => (item.id === id ? normalized : item)) : [normalized, ...content.media] };
     setContent(next);
     setSelectedMediaId(id);
+  };
+
+  // Form Builder Helpers
+  const updateForm = (form: CmsForm) => {
+    const id = form.id || slug(form.title);
+    const normalized = { ...form, id };
+    const formsList = content.forms || [];
+    const exists = formsList.some((item) => item.id === id || (form.id && item.id === form.id));
+    const nextForms = exists
+      ? formsList.map((item) => (item.id === form.id || item.id === id ? normalized : item))
+      : [...formsList, normalized];
+    const next = { ...content, forms: nextForms };
+    setContent(next);
+    setSelectedFormId(id);
+  };
+
+  const addFormField = () => {
+    const newField: CmsFormField = {
+      id: `field_${Date.now()}`,
+      label: 'New Form Field',
+      type: 'text',
+      required: false,
+    };
+    const nextFields = [...(selectedForm.fields || []), newField];
+    updateForm({ ...selectedForm, fields: nextFields });
+  };
+
+  const updateFormField = (fieldIdx: number, updatedField: CmsFormField) => {
+    const nextFields = (selectedForm.fields || []).map((f, idx) => (idx === fieldIdx ? updatedField : f));
+    updateForm({ ...selectedForm, fields: nextFields });
+  };
+
+  const deleteFormField = (fieldIdx: number) => {
+    const nextFields = (selectedForm.fields || []).filter((_, idx) => idx !== fieldIdx);
+    updateForm({ ...selectedForm, fields: nextFields });
+  };
+
+  const moveFormField = (index: number, direction: 'up' | 'down') => {
+    const fields = [...(selectedForm.fields || [])];
+    const targetIndex = direction === 'up' ? index - 1 : index + 1;
+    if (targetIndex < 0 || targetIndex >= fields.length) return;
+    const temp = fields[index];
+    fields[index] = fields[targetIndex];
+    fields[targetIndex] = temp;
+    updateForm({ ...selectedForm, fields });
   };
 
   const handleMediaUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -1142,39 +1198,272 @@ export const AdminDashboard: React.FC = () => {
           </div>
         )}
 
-        {activeTab === 'submissions' && (
-          <div className="admin-submissions" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
-            <div className="admin-panel" style={{ maxHeight: '70vh', overflowY: 'auto' }}>
-              <h2>Contact Inquiries ({content.leads.length})</h2>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '1rem' }}>
-                {content.leads.length === 0 ? (
-                  <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>No leads submitted yet.</p>
-                ) : (
-                  content.leads.map((lead) => (
-                    <article className="admin-record" key={lead.id} style={{ padding: '1.2rem', marginBottom: 0 }}>
-                      <strong style={{ fontSize: '1.05rem', color: 'var(--primary-dark)' }}>{lead.name}</strong>
-                      <span style={{ fontSize: '0.8rem', color: 'var(--accent-green)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px', display: 'block', margin: '0.2rem 0' }}>
-                        {lead.email} &bull; {lead.country} &bull; {lead.inquiryType}
-                      </span>
-                      <p style={{ fontSize: '0.9rem', margin: '0.6rem 0 0 0', color: 'var(--text-main)', lineHeight: '1.5' }}>"{lead.message}"</p>
-                      <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', display: 'block', marginTop: '0.8rem', textAlign: 'right' }}>
-                        Received: {new Date(lead.createdAt).toLocaleString()}
-                      </span>
-                    </article>
-                  ))
-                )}
-              </div>
+        {activeTab === 'forms' && (
+          <div className="admin-editor-grid">
+            <div className="admin-list">
+              <button
+                style={{
+                  backgroundColor: 'var(--accent-green-alpha)',
+                  color: 'var(--primary-dark)',
+                  border: '1px solid var(--accent-green)',
+                  padding: '0.85rem 1rem',
+                  borderRadius: 'var(--border-radius-sm)',
+                  cursor: 'pointer',
+                  fontWeight: 'bold',
+                  textAlign: 'left'
+                }}
+                onClick={() => {
+                  const newId = `form-${Date.now()}`;
+                  const newForm: CmsForm = {
+                    id: newId,
+                    title: 'New Custom Form',
+                    description: 'Description of the new custom form.',
+                    fields: []
+                  };
+                  const nextForms = [...(content.forms || []), newForm];
+                  const next = { ...content, forms: nextForms };
+                  setContent(next);
+                  setSelectedFormId(newId);
+                }}
+                type="button"
+              >
+                + Create New Form
+              </button>
+              {(content.forms || []).map((form) => (
+                <button
+                  className={selectedFormId === form.id ? 'active' : ''}
+                  key={form.id}
+                  onClick={() => setSelectedFormId(form.id)}
+                  type="button"
+                >
+                  {form.title || 'Untitled Form'}
+                </button>
+              ))}
             </div>
 
+            <div className="admin-panel">
+              <h2>Form Editor: {selectedForm.title || 'New Form'}</h2>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: '2rem' }}>
+                Create, configure, and reorder fields for dynamic website forms.
+              </p>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
+                  <label>Form ID (Slug / Unique Key)</label>
+                  <input
+                    placeholder="e.g. contact-feedback"
+                    value={selectedForm.id}
+                    onChange={(event) => updateForm({ ...selectedForm, id: slug(event.target.value) })}
+                    disabled={['global-help-form-en', 'global-help-form-fr'].includes(selectedForm.id)}
+                  />
+                  {['global-help-form-en', 'global-help-form-fr'].includes(selectedForm.id) && (
+                    <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                      System whistleblower forms cannot change their ID.
+                    </span>
+                  )}
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
+                  <label>Form Title</label>
+                  <input
+                    placeholder="e.g. Whistleblower helpline"
+                    value={selectedForm.title}
+                    onChange={(event) => updateForm({ ...selectedForm, title: event.target.value })}
+                  />
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
+                  <label>Description / Instruction Text</label>
+                  <textarea
+                    rows={3}
+                    placeholder="Detailed explanation of the form purpose..."
+                    value={selectedForm.description}
+                    onChange={(event) => updateForm({ ...selectedForm, description: event.target.value })}
+                  />
+                </div>
+
+                <div style={{ marginTop: '1.5rem' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                    <h3>Form Fields ({selectedForm.fields?.length || 0})</h3>
+                    <button
+                      className="btn btn-secondary"
+                      style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }}
+                      type="button"
+                      onClick={addFormField}
+                    >
+                      + Add Form Field
+                    </button>
+                  </div>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                    {(!selectedForm.fields || selectedForm.fields.length === 0) ? (
+                      <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>
+                        No fields added yet. Click "+ Add Form Field" above to start building.
+                      </p>
+                    ) : (
+                      selectedForm.fields.map((field, idx) => (
+                        <div
+                          key={field.id}
+                          className="admin-record"
+                          style={{
+                            padding: '1.2rem',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '0.8rem',
+                            border: '1px solid var(--border-color)',
+                            backgroundColor: 'var(--bg-main)'
+                          }}
+                        >
+                          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', justifySelf: 'stretch', justifyContent: 'space-between' }}>
+                            <strong style={{ fontSize: '0.9rem' }}>Field #{idx + 1} ({field.id})</strong>
+                            <div style={{ display: 'flex', gap: '0.3rem' }}>
+                              <button
+                                className="btn btn-secondary"
+                                style={{ padding: '0.2rem 0.5rem', fontSize: '0.75rem' }}
+                                type="button"
+                                disabled={idx === 0}
+                                onClick={() => moveFormField(idx, 'up')}
+                              >
+                                Up
+                              </button>
+                              <button
+                                className="btn btn-secondary"
+                                style={{ padding: '0.2rem 0.5rem', fontSize: '0.75rem' }}
+                                type="button"
+                                disabled={idx === selectedForm.fields.length - 1}
+                                onClick={() => moveFormField(idx, 'down')}
+                              >
+                                Down
+                              </button>
+                              <button
+                                className="btn btn-secondary"
+                                style={{ padding: '0.2rem 0.5rem', fontSize: '0.75rem', color: 'red', borderColor: 'rgba(255,0,0,0.2)' }}
+                                type="button"
+                                onClick={() => deleteFormField(idx)}
+                              >
+                                Remove
+                              </button>
+                            </div>
+                          </div>
+
+                          <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr 0.5fr', gap: '1rem' }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
+                              <label style={{ fontSize: '0.8rem' }}>Field Label</label>
+                              <input
+                                value={field.label}
+                                onChange={(e) => updateFormField(idx, { ...field, label: e.target.value })}
+                                style={{ padding: '0.4rem', fontSize: '0.85rem' }}
+                              />
+                            </div>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
+                              <label style={{ fontSize: '0.8rem' }}>Field Type</label>
+                              <select
+                                value={field.type}
+                                onChange={(e) => updateFormField(idx, { ...field, type: e.target.value as CmsFormField['type'] })}
+                                style={{ padding: '0.4rem', fontSize: '0.85rem' }}
+                              >
+                                <option value="text">Short Text</option>
+                                <option value="email">Email</option>
+                                <option value="textarea">Paragraph Text</option>
+                                <option value="select">Dropdown Select</option>
+                                <option value="radio">Radio Options</option>
+                                <option value="checkbox">Checkboxes</option>
+                              </select>
+                            </div>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem', justifyContent: 'center', alignItems: 'center' }}>
+                              <label style={{ fontSize: '0.8rem', marginBottom: '0.3rem' }}>Required</label>
+                              <input
+                                type="checkbox"
+                                checked={field.required}
+                                onChange={(e) => updateFormField(idx, { ...field, required: e.target.checked })}
+                                style={{ transform: 'scale(1.2)' }}
+                              />
+                            </div>
+                          </div>
+
+                          {['select', 'radio', 'checkbox'].includes(field.type) && (
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
+                              <label style={{ fontSize: '0.8rem' }}>Options (One per line)</label>
+                              <textarea
+                                rows={3}
+                                placeholder="Option 1&#10;Option 2&#10;Option 3"
+                                value={(field.options || []).join('\n')}
+                                onChange={(e) => updateFormField(idx, { ...field, options: e.target.value.split('\n').map(o => o.trim()).filter(Boolean) })}
+                                style={{ padding: '0.4rem', fontSize: '0.85rem', lineHeight: '1.4' }}
+                              />
+                            </div>
+                          )}
+
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
+                            <label style={{ fontSize: '0.8rem' }}>Placeholder / Helper Text (Optional)</label>
+                            <input
+                              value={field.placeholder || ''}
+                              onChange={(e) => updateFormField(idx, { ...field, placeholder: e.target.value })}
+                              style={{ padding: '0.4rem', fontSize: '0.85rem' }}
+                            />
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </div>
+
+                <div style={{ marginTop: '2rem', display: 'flex', gap: '1rem' }}>
+                  <button
+                    className="btn btn-secondary"
+                    style={{ color: 'red', borderColor: 'red' }}
+                    type="button"
+                    disabled={['global-help-form-en', 'global-help-form-fr'].includes(selectedForm.id)}
+                    onClick={() => {
+                      if (confirm(`Are you sure you want to delete form "${selectedForm.title}"? This will also remove access for users.`)) {
+                        const nextForms = (content.forms || []).filter((f) => f.id !== selectedForm.id);
+                        const next = { ...content, forms: nextForms };
+                        setContent(next);
+                        setSelectedFormId(nextForms[0]?.id || '');
+                      }
+                    }}
+                  >
+                    Delete Form
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'submissions' && (
+          <div className="admin-submissions" style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '2rem' }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-              <div className="admin-panel" style={{ maxHeight: '35vh', overflowY: 'auto' }}>
+              <div className="admin-panel" style={{ maxHeight: '38vh', overflowY: 'auto' }}>
+                <h2>Contact Inquiries ({content.leads.length})</h2>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '1rem' }}>
+                  {content.leads.length === 0 ? (
+                    <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>No leads submitted yet.</p>
+                  ) : (
+                    content.leads.map((lead) => (
+                      <article className="admin-record" key={lead.id} style={{ padding: '1.2rem', marginBottom: 0 }}>
+                        <strong style={{ fontSize: '1.05rem', color: 'var(--primary-dark)' }}>{lead.name}</strong>
+                        <span style={{ fontSize: '0.8rem', color: 'var(--accent-green)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px', display: 'block', margin: '0.2rem 0' }}>
+                          {lead.email} &bull; {lead.country} &bull; {lead.inquiryType}
+                        </span>
+                        <p style={{ fontSize: '0.9rem', margin: '0.6rem 0 0 0', color: 'var(--text-main)', lineHeight: '1.5' }}>"{lead.message}"</p>
+                        <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', display: 'block', marginTop: '0.8rem', textAlign: 'right' }}>
+                          Received: {new Date(lead.createdAt).toLocaleString()}
+                        </span>
+                      </article>
+                    ))
+                  )}
+                </div>
+              </div>
+
+              <div className="admin-panel" style={{ maxHeight: '20vh', overflowY: 'auto' }}>
                 <h2>Newsletter Subscribers ({content.subscribers.length})</h2>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem', marginTop: '1rem' }}>
                   {content.subscribers.length === 0 ? (
                     <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>No subscribers.</p>
                   ) : (
                     content.subscribers.map((subscriber) => (
-                      <article className="admin-record" key={subscriber.id} style={{ padding: '0.8rem 1.2rem', margin: 0, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <article className="admin-record" key={subscriber.id} style={{ padding: '0.8rem 1.2rem', margin: 0, display: 'flex', justifySelf: 'stretch', justifyContent: 'space-between', alignItems: 'center' }}>
                         <strong style={{ fontSize: '0.95rem' }}>{subscriber.email}</strong>
                         <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{new Date(subscriber.createdAt).toLocaleDateString()}</span>
                       </article>
@@ -1183,7 +1472,7 @@ export const AdminDashboard: React.FC = () => {
                 </div>
               </div>
 
-              <div className="admin-panel" style={{ maxHeight: '35vh', overflowY: 'auto' }}>
+              <div className="admin-panel" style={{ maxHeight: '25vh', overflowY: 'auto' }}>
                 <h2>Job Applications ({content.applications.length})</h2>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '1rem' }}>
                   {content.applications.length === 0 ? (
@@ -1200,6 +1489,60 @@ export const AdminDashboard: React.FC = () => {
                     ))
                   )}
                 </div>
+              </div>
+            </div>
+
+            <div className="admin-panel" style={{ maxHeight: '88vh', overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
+              <h2>Dynamic Form Submissions</h2>
+              
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', marginTop: '1.2rem', marginBottom: '1.5rem' }}>
+                <label style={{ fontSize: '0.85rem', fontWeight: 'bold' }}>Filter by Compliance Form:</label>
+                <select
+                  value={selectedSubmissionsFormId}
+                  onChange={(e) => setSelectedSubmissionsFormId(e.target.value)}
+                  style={{ padding: '0.6rem', fontSize: '0.9rem', borderRadius: 'var(--border-radius-sm)', border: '1px solid var(--border-color)', width: '100%' }}
+                >
+                  {(content.forms || []).map((form) => (
+                    <option key={form.id} value={form.id}>
+                      {form.title} ({form.id})
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem', flexGrow: 1 }}>
+                {(content.formSubmissions || []).filter((sub) => sub.formId === selectedSubmissionsFormId).length === 0 ? (
+                  <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>No submissions found for this form.</p>
+                ) : (
+                  (content.formSubmissions || [])
+                    .filter((sub) => sub.formId === selectedSubmissionsFormId)
+                    .map((submission) => (
+                      <article
+                        className="admin-record"
+                        key={submission.id}
+                        style={{ padding: '1.2rem', display: 'flex', flexDirection: 'column', gap: '0.6rem' }}
+                      >
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(0,0,0,0.05)', paddingBottom: '0.4rem' }}>
+                          <span style={{ fontSize: '0.8rem', color: 'var(--accent-green)', fontWeight: 700 }}>
+                            ID: {submission.id.slice(0, 8)}...
+                          </span>
+                          <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                            {new Date(submission.createdAt).toLocaleString()}
+                          </span>
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', marginTop: '0.4rem' }}>
+                          {Object.entries(submission.data || {}).map(([key, val]) => (
+                            <div key={key} style={{ fontSize: '0.85rem', lineHeight: '1.4' }}>
+                              <strong style={{ color: 'var(--text-muted)' }}>{key}: </strong>
+                              <span style={{ color: 'var(--text-main)' }}>
+                                {Array.isArray(val) ? val.join(', ') : String(val)}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </article>
+                    ))
+                )}
               </div>
             </div>
           </div>

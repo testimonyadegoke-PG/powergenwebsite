@@ -6,74 +6,36 @@ import { resolveProp, getBlockStyle } from './pg-blocks';
 import { vTheme, VSection, VKicker } from './variant-kit';
 import type { BlockComponentProps } from '../types';
 
+// Helper to determine active variant based on block props or activeTemplate
+const getActiveVariant = (block: any, activeTemplate?: string): number => {
+  if (block.props.variant !== undefined) return Number(block.props.variant);
+  const templateIndexMap: Record<string, number> = {
+    default: 1, agri: 2, ev: 3, microgrid: 4, pioneer: 5, hydrogen: 6, bess: 7,
+    corporate_a: 8, corporate_b: 9, corporate_c: 10, corporate_d: 11, corporate_e: 12
+  };
+  return templateIndexMap[activeTemplate || 'default'] || 1;
+};
+
 // ==========================================
 // 1. TEXT BLOCK
 // ==========================================
-export const TextBlock: React.FC<BlockComponentProps> = ({ block, onChange, selected }) => {
-  const variant = Number(block.props.variant || 1);
+export const TextBlock: React.FC<BlockComponentProps> = ({ block, onChange, selected, activeTemplate }) => {
+  const variant = getActiveVariant(block, activeTemplate);
 
   const getTextBlockVariantContent = (v: number) => {
     switch (v) {
-      case 2:
-        return {
-          tag: 'SYS.STATUS: ACTIVE',
-          title: 'Solar Farm Telemetry & Operations Log',
-          text: 'Monitoring megawatts of distributed solar assets with second-by-second telemetry automation streams, balancing grid frequencies dynamically.',
-        };
-      case 3:
-        return {
-          tag: 'HYDROGEN LAB // 03',
-          title: 'Hydrogen Water Electrolysis Catalytic Extraction',
-          text: 'Extracting clean hydrogen via high-efficiency water electrolysis powered directly by dedicated utility solar arrays.',
-        };
-      case 4:
-        return {
-          tag: 'BESS CAPACITY REPORT',
-          title: 'GRID BESS BATTERY STORAGE OPTIMIZER',
-          text: 'Deploying heavy lithium battery storage units (BESS) to eliminate peak demand charges, stabilize voltages, and buffer generation gaps.',
-        };
-      case 5:
-        return {
-          tag: 'COMMUNITY IMPACT',
-          title: 'Community Solar Microgrids System',
-          text: 'Connecting school complexes, local healthcare clinics, and rural businesses with reliable, prepaid mini-grid electricity.',
-        };
-      case 6:
-        return {
-          tag: 'AGRO-ENERGY SYNERGY',
-          title: 'Agrophotovoltaic Green Eco-Farms Shading',
-          text: 'Co-locating clean solar panels with agricultural fields to shade crops and power automated deep water pumps.',
-        };
-      case 7:
-        return {
-          tag: 'NET-ZERO METRO',
-          title: 'Net-Zero Municipal Energy Infrastructure',
-          text: 'Helping cities offset peak municipal demand, transition public transit fleets to EV, and track grid-wide carbon limits.',
-        };
-      case 8:
-        return {
-          tag: 'KINETIC DYNAMICS',
-          title: 'HYBRID WIND + SOLAR GENERATION GRID',
-          text: 'Combining wind turbines, solar panels, and battery storage into a balanced hybrid offgrid system for heavy industries.',
-        };
-      case 9:
-        return {
-          tag: 'CLIMATE FINANCE',
-          title: 'Climate Impact Finance PPA Platform',
-          text: 'Securing long-term clean energy Power Purchase Agreements (PPAs) backed by international DFIs to fund multi-megawatt platforms.',
-        };
-      case 10:
-        return {
-          tag: 'TACTICAL UNIT // 10',
-          title: 'RAPID DEPLOYMENT OFF-GRID POWER',
-          text: 'Shipping containerized micro-grid core modules for rapid setup at remote construction, mining, and exploration sites.',
-        };
-      default:
-        return {
-          tag: 'SECTION HEADER',
-          title: 'Responsive Custom Title',
-          text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut feugiat felis ac nulla bibendum, vitae sodales nisi rhoncus.',
-        };
+      case 2: return { tag: 'AGRO-ENERGY SYNERGY', title: 'Agrophotovoltaic Green Eco-Farms', text: 'Co-locating clean solar panels with agricultural fields to shade crops and power automated deep water pumps.' };
+      case 3: return { tag: 'NET-ZERO METRO', title: 'Net-Zero Municipal Infrastructure', text: 'Helping cities offset peak municipal demand, transition public transit fleets to EV, and track grid-wide carbon limits.' };
+      case 4: return { tag: 'COMMUNITY IMPACT', title: 'Community Solar Microgrids', text: 'Connecting school complexes, local healthcare clinics, and rural businesses with reliable, prepaid mini-grid electricity.' };
+      case 5: return { tag: 'TACTICAL UNIT', title: 'Rapid Deployment Off-grid Power', text: 'Shipping containerized micro-grid core modules for rapid setup at remote construction, mining, and exploration sites.' };
+      case 6: return { tag: 'HYDROGEN LAB', title: 'Water Electrolysis Extraction', text: 'Extracting clean hydrogen via high-efficiency water electrolysis powered directly by dedicated utility solar arrays.' };
+      case 7: return { tag: 'BESS CAPACITY', title: 'Grid BESS Battery Optimizer', text: 'Deploying heavy lithium battery storage units to eliminate peak demand charges and stabilize voltages.' };
+      case 8: return { tag: 'INDUSTRIAL SCALE', title: 'C&I Installation Efficiency', text: 'Maximizing commercial rooftop yields with advanced string monitoring and localized demand response.' };
+      case 9: return { tag: 'UTILITY SCALE', title: 'Solar Park Yield Optimization', text: 'Managing multi-megawatt generation platforms connected to high-voltage national transmission networks.' };
+      case 10: return { tag: 'REMOTE CONNECTIVITY', title: 'Mini-grid Expansion Programs', text: 'Accelerating energy access through scalable, decentralized solar generation nodes in isolated regions.' };
+      case 11: return { tag: 'ENERGY TRANSITION', title: 'Corporate Decarbonization Pathways', text: 'Structuring bespoke renewable energy supply agreements to meet rigorous corporate sustainability targets.' };
+      case 12: return { tag: 'HYBRID SYSTEMS', title: 'Advanced Hybrid Grid Operations', text: 'Seamlessly integrating solar, wind, and storage assets through autonomous AI-driven dispatch controllers.' };
+      default: return { tag: 'SECTION HEADER', title: 'Responsive Custom Title', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut feugiat felis ac nulla bibendum, vitae sodales nisi rhoncus.' };
     }
   };
 
@@ -546,81 +508,23 @@ export const TextBlock: React.FC<BlockComponentProps> = ({ block, onChange, sele
 // ==========================================
 // 2. CTA BLOCK
 // ==========================================
-export const CtaBlock: React.FC<BlockComponentProps> = ({ block, onChange, selected }) => {
-  const variant = Number(block.props.variant || 1);
+export const CtaBlock: React.FC<BlockComponentProps> = ({ block, onChange, selected, activeTemplate }) => {
+  const variant = getActiveVariant(block, activeTemplate);
 
   const getCtaVariantContent = (v: number) => {
     switch (v) {
-      case 2:
-        return {
-          title: 'Audit Your Solar Farm Telemetry?',
-          text: 'Optimize utility inverter outputs and string telemetry logging today.',
-          btnLabel: 'Open Telemetry Log',
-          btnPath: '/services/c-i',
-        };
-      case 3:
-        return {
-          title: 'Build Green Hydrogen Hubs?',
-          text: 'Electrolyzer water splitters planning and gas compression canisters setups.',
-          btnLabel: 'Contact Hydrogen Lab',
-          btnPath: '/contact',
-        };
-      case 4:
-        return {
-          title: 'Deploy substation BESS Battery racks?',
-          text: 'MWh lithium arrays thermal cooling setups and peak shaving loops.',
-          btnLabel: 'Request Battery Spec',
-          btnPath: '/services/c-i',
-        };
-      case 5:
-        return {
-          title: 'Support Community Microgrids?',
-          text: 'GSM smart meters networks connecting rural schools and village clinics.',
-          btnLabel: 'Partner With Us',
-          btnPath: '/services/mini-grids',
-        };
-      case 6:
-        return {
-          title: 'Design raised Agrophotovoltaic grids?',
-          text: 'High tracker rows soil evaporation shading pump fields setups.',
-          btnLabel: 'Agro-Solar Specs',
-          btnPath: '/services/mini-grids',
-        };
-      case 7:
-        return {
-          title: 'Partner on municipal Net-zero grids?',
-          text: 'EV transit charge bay distribution fields and carbon offset audits.',
-          btnLabel: 'Initiate City Audit',
-          btnPath: '/contact',
-        };
-      case 8:
-        return {
-          title: 'Install hybrid Wind-solar cogeneration?',
-          text: 'Slashing backup diesel alternators run-hours by 80% at remote camps.',
-          btnLabel: 'Deploy Hybrid Node',
-          btnPath: '/services/c-i',
-        };
-      case 9:
-        return {
-          title: 'Invest in climate financing PPAs?',
-          text: 'Underwriting sovereign solar cash flow portfolios certified Gold Standard.',
-          btnLabel: 'Access Yield Platform',
-          btnPath: '/contact',
-        };
-      case 10:
-        return {
-          title: 'Dispatch containerized Offgrid Cubes?',
-          text: 'Mobile container battery cubes anchoring in remote sites under two hours.',
-          btnLabel: 'Request Deploy Quote',
-          btnPath: '/contact',
-        };
-      default:
-        return {
-          title: 'Ready to build clean energy systems?',
-          text: 'Contact our operational offices to request consulting mapping for decentralized mini grids.',
-          btnLabel: 'Get Connected Today',
-          btnPath: '/contact',
-        };
+      case 2: return { title: 'Design raised Agrophotovoltaic grids?', text: 'High tracker rows soil evaporation shading pump fields setups.', btnLabel: 'Agro-Solar Specs', btnPath: '/services/mini-grids' };
+      case 3: return { title: 'Partner on municipal Net-zero grids?', text: 'EV transit charge bay distribution fields and carbon offset audits.', btnLabel: 'Initiate City Audit', btnPath: '/contact' };
+      case 4: return { title: 'Support Community Microgrids?', text: 'GSM smart meters networks connecting rural schools and village clinics.', btnLabel: 'Partner With Us', btnPath: '/services/mini-grids' };
+      case 5: return { title: 'Dispatch containerized Offgrid Cubes?', text: 'Mobile container battery cubes anchoring in remote sites under two hours.', btnLabel: 'Request Deploy Quote', btnPath: '/contact' };
+      case 6: return { title: 'Build Green Hydrogen Hubs?', text: 'Electrolyzer water splitters planning and gas compression canisters setups.', btnLabel: 'Contact Hydrogen Lab', btnPath: '/contact' };
+      case 7: return { title: 'Deploy substation BESS Battery racks?', text: 'MWh lithium arrays thermal cooling setups and peak shaving loops.', btnLabel: 'Request Battery Spec', btnPath: '/services/c-i' };
+      case 8: return { title: 'Scale your C&I Solar deployment?', text: 'Unlock operational savings with zero-capex rooftop solar and storage solutions.', btnLabel: 'Get C&I Assessment', btnPath: '/services/c-i' };
+      case 9: return { title: 'Invest in utility-scale generation?', text: 'Partner on high-yield solar park developments backed by solid off-take agreements.', btnLabel: 'Explore Utility Projects', btnPath: '/projects' };
+      case 10: return { title: 'Expand rural electrification?', text: 'Co-develop sustainable mini-grids serving thousands of new connections.', btnLabel: 'Discuss Mini-grids', btnPath: '/services/mini-grids' };
+      case 11: return { title: 'Achieve your Net-Zero targets?', text: 'Secure verified renewable energy attributes through dedicated corporate PPAs.', btnLabel: 'Corporate Strategy', btnPath: '/contact' };
+      case 12: return { title: 'Upgrade to a smart hybrid grid?', text: 'Integrate multiple generation sources with our intelligent dispatch control platform.', btnLabel: 'Hybrid Grid Solutions', btnPath: '/services/c-i' };
+      default: return { title: 'Ready to build clean energy systems?', text: 'Contact our operational offices to request consulting mapping for decentralized mini grids.', btnLabel: 'Get Connected Today', btnPath: '/contact' };
     }
   };
 
@@ -1168,81 +1072,23 @@ export const CtaBlock: React.FC<BlockComponentProps> = ({ block, onChange, selec
 // ==========================================
 // 3. PG PASSION BLOCK
 // ==========================================
-export const PgPassionBlock: React.FC<BlockComponentProps> = ({ block, onChange, selected }) => {
-  const variant = Number(block.props.variant || 1);
+export const PgPassionBlock: React.FC<BlockComponentProps> = ({ block, onChange, selected, activeTemplate }) => {
+  const variant = getActiveVariant(block, activeTemplate);
 
   const getPassionVariantContent = (v: number) => {
     switch (v) {
-      case 2:
-        return {
-          tag: 'MONITORING LEADERSHIP',
-          title: 'Automating Megawatts of Solar Strings',
-          text1: 'We believe distributed grid assets should run without manual intervention. Our central command center checks active panels continuously.',
-          text2: 'Our systems analyze output curves to diagnose solar degradation and coordinate field crews.',
-        };
-      case 3:
-        return {
-          tag: 'GREEN HYDROGEN PIONEERS',
-          title: 'Driving Water Electrolysis Synergies',
-          text1: 'We leverage green hydrogen systems to capture and store excess midday solar power.',
-          text2: 'This high-purity fuel replaces coal and gas inputs in major heavy chemical manufacturing complexes.',
-        };
-      case 4:
-        return {
-          tag: 'GRID BESS STORAGE',
-          title: 'Deploying Megawatts of Heavy Lithium Pack',
-          text1: 'We run heavy lithium BESS containers at critical subgrid nodes, balancing loads on demand.',
-          text2: 'Our batteries react within milliseconds to voltage anomalies, ensuring grid frequency balance.',
-        };
-      case 5:
-        return {
-          tag: 'COMMUNITY SOCIAL IMPACT',
-          title: 'Empowering Communities With Smart Grids',
-          text1: 'We are committed to delivering clean prepaid electricity to remote villages across Africa.',
-          text2: 'By providing lights to schools and cold storage to markets, we drive regional microeconomic growth.',
-        };
-      case 6:
-        return {
-          tag: 'FOOD-ENERGY NEXUS',
-          title: 'Co-locating raised trackers and farming fields',
-          text1: 'We designed agricultural solar arrays that elevate panels above crop rows, optimizing lands.',
-          text2: 'These arrays decrease soil moisture evaporation while driving solar pumps for automated irrigation.',
-        };
-      case 7:
-        return {
-          tag: 'SMART MUNICIPAL FUTURES',
-          title: 'Decarbonizing Metropolitans and transit lines',
-          text1: 'We partner with city authorities to install rooftop solar arrays on public infrastructure grids.',
-          text2: 'These grids charge EV transit vehicles, generating carbon credits tracked on secure offset registries.',
-        };
-      case 8:
-        return {
-          tag: 'WIND-SOLAR CO-GENERATION',
-          title: 'Integrating Wind turbines & Solar strings',
-          text1: 'We build hybrid systems combining wind turbines and solar panels to ensure a balanced energy flow.',
-          text2: 'Our smart control systems adjust storage draws instantly, bypassing fuel delivery risks.',
-        };
-      case 9:
-        return {
-          tag: 'CLIMATE PORTFOLIOS',
-          title: 'Aggregating cash flowing Clean Yield Assets',
-          text1: 'We group operating solar assets into revolving portfolios backed by Power Purchase Agreements.',
-          text2: 'These structured investments comply with Gold Standard guidelines, yielding returns for sponsors.',
-        };
-      case 10:
-        return {
-          tag: 'OFFGRID PIONEERS',
-          title: 'Containerized Cubes deployed in extreme climates',
-          text1: 'We build integrated solar containers configured to deploy in two hours on remote mining sites.',
-          text2: 'These cubes operate in temperature limits of -40Â°C to +55Â°C, syncing grid telemetry via satellite.',
-        };
-      default:
-        return {
-          tag: 'Energy Innovation',
-          title: 'Driving Renewable Energy Solutions is Our Passion',
-          text1: 'At PowerGen, we are committed to advancing the transition to sustainable energy solutions.',
-          text2: 'Every installation managed by our teams represents a custom-designed network combining premium solar panels with heavy duty lithium storage.',
-        };
+      case 2: return { tag: 'AGRO-PV INNOVATION', title: 'Empowering Agriculture With Solar', text1: 'We believe clean energy and food security go hand-in-hand.', text2: 'Our raised tracker rows shade crops, reduce evaporation, and power vital irrigation pumps.' };
+      case 3: return { tag: 'URBAN TRANSITION', title: 'Decarbonizing Municipal Infrastructure', text1: 'We partner with city authorities to build smart net-zero grids.', text2: 'From EV transit loops to public building offsets, we accelerate the urban energy transition.' };
+      case 4: return { tag: 'COMMUNITY SOCIAL IMPACT', title: 'Empowering Communities With Smart Grids', text1: 'We believe access to reliable power is a fundamental driver of economic growth in remote regions.', text2: 'Our prepaid mini-grids bring first-time electricity to schools, clinics, and local enterprises.' };
+      case 5: return { tag: 'TACTICAL DEPLOYMENT', title: 'Rapid Off-Grid Power Solutions', text1: 'We deliver power where traditional infrastructure cannot reach.', text2: 'Our containerized solar cubes are built for extreme environments and deployable within hours.' };
+      case 6: return { tag: 'GREEN HYDROGEN PIONEERS', title: 'Driving Water Electrolysis Synergies', text1: 'We leverage green hydrogen systems to capture and store excess midday solar power.', text2: 'This high-purity fuel replaces coal and gas inputs in major heavy chemical manufacturing complexes.' };
+      case 7: return { tag: 'GRID BESS STORAGE', title: 'Deploying Megawatts of Heavy Lithium Pack', text1: 'We run heavy lithium BESS containers at critical subgrid nodes, balancing loads on demand.', text2: 'Our batteries react within milliseconds to voltage anomalies, ensuring grid frequency balance.' };
+      case 8: return { tag: 'INDUSTRIAL EFFICIENCY', title: 'Powering Commercial Output', text1: 'We design solar solutions that align with the bottom line of heavy industry.', text2: 'Our C&I systems slash operational costs and provide energy security against grid outages.' };
+      case 9: return { tag: 'UTILITY SCALE IMPACT', title: 'Transforming National Generation', text1: 'We develop solar parks that reshape a nation’s energy mix.', text2: 'Our utility-scale projects provide clean, reliable baseload power to the transmission grid.' };
+      case 10: return { tag: 'REMOTE CONNECTIVITY', title: 'Bridging the Energy Divide', text1: 'We focus on bringing scalable generation nodes to isolated regions.', text2: 'Our decentralized mini-grids accelerate energy access for off-grid populations.' };
+      case 11: return { tag: 'CORPORATE ALIGNMENT', title: 'Guiding the Net-Zero Journey', text1: 'We help corporations navigate the complex transition to verified clean energy.', text2: 'Our PPA portfolios deliver transparent, impactful decarbonization solutions.' };
+      case 12: return { tag: 'HYBRID INTELLIGENCE', title: 'Orchestrating Complex Grids', text1: 'We believe the future of energy is hybrid and autonomous.', text2: 'Our AI-driven dispatch controllers seamlessly balance solar, wind, and storage assets in real-time.' };
+      default: return { tag: 'OUR PASSION', title: 'Transforming the Energy Landscape', text1: 'We believe distributed grid assets should run without manual intervention.', text2: 'Our systems analyze output curves to diagnose solar degradation and coordinate field crews.' };
     }
   };
 
@@ -2020,22 +1866,24 @@ export const PgPassionBlock: React.FC<BlockComponentProps> = ({ block, onChange,
 // ==========================================
 // 4. PG JOBS INTRO BLOCK
 // ==========================================
-export const PgJobsIntroBlock: React.FC<BlockComponentProps> = ({ block, onChange, selected }) => {
+export const PgJobsIntroBlock: React.FC<BlockComponentProps> = ({ block, onChange, selected, activeTemplate }) => {
   const { content } = useCms();
   const page = content.pages.jobs;
-  const variant = Number(block.props.variant || 1);
+  const variant = getActiveVariant(block, activeTemplate);
 
   const getIntroVariantContent = (v: number) => {
     switch (v) {
-      case 2: return { t: 'Building Solar Telemetry Systems Together', text: 'We hire code developers, diagnostic analysts, and field electricians to scale and audit utility arrays across active grids.' };
-      case 3: return { t: 'Engineering Clean Hydrogen Process loops', text: 'We recruit process engineers, gas safety monitors, and chemical logistics teams to run high-pressure electrolysis plants.' };
-      case 4: return { t: 'Designing Substation BESS Battery cabinets', text: 'We seek lithium battery cell specialists, HVAC design technicians, and grid inverter software engineers.' };
-      case 5: return { t: 'Scaling Prepaid Community microgrids', text: 'We train lines operators, customer support representatives, and payment API coders to connect rural villages.' };
-      case 6: return { t: 'Pioneering Raised Agrophotovoltaic rows', text: 'We hire agricultural scientists, tracker structural engineers, and irrigation controller coders.' };
-      case 7: return { t: 'Decarbonizing Municipal Councils & Transit', text: 'We look for EV charger technicians, carbon credit auditors, and sovereign account managers.' };
-      case 8: return { t: 'Configuring Wind turbine and Solar cogeneration', text: 'We seek wind turbine mechanics, co-generation control software developers, and subgrid operators.' };
-      case 9: return { t: 'Structuring Developer PPA platform cash flows', text: 'We recruit ESG compliance specialists, credit lawyers, and revolving facility accountants.' };
-      case 10: return { t: 'Deploying steel enclosed Mobile solar cubes', text: 'We hire logistics engineers, container assembly technicians, and satellite network coders.' };
+      case 2: return { t: 'Pioneering Raised Agrophotovoltaic rows', text: 'We hire agricultural scientists, tracker structural engineers, and irrigation controller coders.' };
+      case 3: return { t: 'Decarbonizing Municipal Councils & Transit', text: 'We look for EV charger technicians, carbon credit auditors, and sovereign account managers.' };
+      case 4: return { t: 'Scaling Prepaid Community microgrids', text: 'We train lines operators, customer support representatives, and payment API coders to connect rural villages.' };
+      case 5: return { t: 'Deploying steel enclosed Mobile solar cubes', text: 'We hire logistics engineers, container assembly technicians, and satellite network coders.' };
+      case 6: return { t: 'Engineering Clean Hydrogen Process loops', text: 'We recruit process engineers, gas safety monitors, and chemical logistics teams to run high-pressure electrolysis plants.' };
+      case 7: return { t: 'Designing Substation BESS Battery cabinets', text: 'We seek lithium battery cell specialists, HVAC design technicians, and grid inverter software engineers.' };
+      case 8: return { t: 'Driving Industrial Solar Scale', text: 'We hire C&I project managers, commercial structural engineers, and energy efficiency analysts.' };
+      case 9: return { t: 'Building Utility-Scale Generation', text: 'We recruit high-voltage electrical engineers, utility interconnection specialists, and project finance directors.' };
+      case 10: return { t: 'Expanding Remote Mini-grid Concessions', text: 'We seek community engagement officers, off-grid distribution engineers, and rural logistics coordinators.' };
+      case 11: return { t: 'Structuring Corporate PPA Portfolios', text: 'We recruit ESG compliance specialists, credit lawyers, and renewable energy attribute accountants.' };
+      case 12: return { t: 'Architecting Hybrid Grid Intelligence', text: 'We hire AI dispatch control developers, hybrid systems integration engineers, and grid-forming specialists.' };
       default: return { t: page?.sections?.introTitle || 'Join our team and power the future', text: page?.sections?.introText || 'Help us develop clean energy systems, manage distributed mini-grids, and run remote operations across Africa.' };
     }
   };
@@ -2415,22 +2263,24 @@ export const PgJobsIntroBlock: React.FC<BlockComponentProps> = ({ block, onChang
 // ==========================================
 // 5. PG PROJECTS INTRO BLOCK
 // ==========================================
-export const PgProjectsIntroBlock: React.FC<BlockComponentProps> = ({ block, onChange, selected }) => {
+export const PgProjectsIntroBlock: React.FC<BlockComponentProps> = ({ block, onChange, selected, activeTemplate }) => {
   const { content } = useCms();
   const page = content.pages.projects;
-  const variant = Number(block.props.variant || 1);
+  const variant = getActiveVariant(block, activeTemplate);
 
   const getIntroVariantContent = (v: number) => {
     switch (v) {
-      case 2: return { tag: 'UTILITY ASSETS', t: 'Staging High Capacity Utility Arrays', text: 'We audit and coordinate multi-megawatt solar farm networks, logging string performance and inverter diagnostics dynamically.' };
-      case 3: return { tag: 'GAS GRID ENGINES', t: 'Splitting Pure Water with Solar Currents', text: 'We build green hydrogen electrolysis hubs integrated with high-pressure compression tanks and industrial pipelines.' };
-      case 4: return { tag: 'BESS SUBSTATIONS', t: 'Substation Scale Energy Buffering Platforms', text: 'We deploy MWh storage enclosures using safe LFP cells, discharging subgrids within milliseconds during frequency drops.' };
-      case 5: return { tag: 'COMMUNITY IMPACT', t: 'GSM Smart Prepaid Local Microgrids', text: 'We connect remote school buildings and local village shops to prepaid mini-grids, billing via mobile money gateways.' };
-      case 6: return { tag: 'ECO-AGRICULTURE', t: 'Co-Located Raised Tracker Arrays Farms', text: 'We engineer solar arrays mounted on high steel frames to protect soil moisture levels and power automated greenhouse irrigation pumps.' };
-      case 7: return { tag: 'MUNICIPAL UTILITIES', t: 'Decarbonizing public structures EV transit', text: 'We partner with city authorities to install public solar fields, powering metropolitan transit and reporting avoided carbon offsets.' };
-      case 8: return { tag: 'CO-GENERATION MIX', t: 'Integrating Wind Turbines and Solar Fields', text: 'We build hybrid systems combining wind turbine fleets with bifacial solar panels and battery storage containers, balancing subgrids.' };
-      case 9: return { tag: 'PORTFOLIO DISPATCH', t: 'Investment Grade PPA Asset Platform Cashflows', text: 'We bundle operating clean energy fields into yield portfolios certified under Gold Standard carbon registries.' };
-      case 10: return { tag: 'TACTICAL DEPOTS', t: 'Mobile Solar Containers Dispatched Remote', text: 'We ship steel-enclosed solar cubes to remote exploratory camps, anchor rigging panel racks in under two hours.' };
+      case 2: return { tag: 'ECO-AGRICULTURE', t: 'Co-Located Raised Tracker Arrays Farms', text: 'We engineer solar arrays mounted on high steel frames to protect soil moisture levels and power automated greenhouse irrigation pumps.' };
+      case 3: return { tag: 'MUNICIPAL UTILITIES', t: 'Decarbonizing public structures EV transit', text: 'We partner with city authorities to install public solar fields, powering metropolitan transit and reporting avoided carbon offsets.' };
+      case 4: return { tag: 'COMMUNITY IMPACT', t: 'GSM Smart Prepaid Local Microgrids', text: 'We connect remote school buildings and local village shops to prepaid mini-grids, billing via mobile money gateways.' };
+      case 5: return { tag: 'TACTICAL DEPOTS', t: 'Mobile Solar Containers Dispatched Remote', text: 'We ship steel-enclosed solar cubes to remote exploratory camps, anchor rigging panel racks in under two hours.' };
+      case 6: return { tag: 'GAS GRID ENGINES', t: 'Splitting Pure Water with Solar Currents', text: 'We build green hydrogen electrolysis hubs integrated with high-pressure compression tanks and industrial pipelines.' };
+      case 7: return { tag: 'BESS SUBSTATIONS', t: 'Substation Scale Energy Buffering Platforms', text: 'We deploy MWh storage enclosures using safe LFP cells, discharging subgrids within milliseconds during frequency drops.' };
+      case 8: return { tag: 'INDUSTRIAL DEPLOYMENT', t: 'Commercial & Industrial Solar Projects', text: 'We optimize factory rooftops and commercial facilities with high-yield solar arrays to slash operational power costs.' };
+      case 9: return { tag: 'UTILITY ASSETS', t: 'Staging High Capacity Utility Arrays', text: 'We audit and coordinate multi-megawatt solar farm networks, logging string performance and inverter diagnostics dynamically.' };
+      case 10: return { tag: 'REMOTE CONCESSIONS', t: 'Expanding Off-grid Energy Access', text: 'We implement scalable, decentralized mini-grid generation nodes in isolated regions to bridge the energy divide.' };
+      case 11: return { tag: 'CORPORATE TRANSITION', t: 'Verified Corporate Decarbonization Assets', text: 'We structure dedicated renewable energy supply agreements to meet rigorous corporate net-zero targets.' };
+      case 12: return { tag: 'HYBRID TOPOLOGY', t: 'Advanced Hybrid Microgrid Deployments', text: 'We integrate complex combinations of solar, wind, and storage controlled by autonomous dispatch intelligence.' };
       default: return { tag: 'Our Work', t: page?.sections?.introTitle || 'Decentralized Clean Energy Projects', text: page?.sections?.introText || 'PowerGen has designed, built, and commissioned solar and battery storage systems for businesses and microgrid networks.' };
     }
   };
@@ -2871,8 +2721,8 @@ export const PgProjectsIntroBlock: React.FC<BlockComponentProps> = ({ block, onC
 // ==========================================
 // 6. PG PROJECT CYCLE BLOCK
 // ==========================================
-export const PgProjectCycleBlock: React.FC<BlockComponentProps> = ({ block, selected, onChange }) => {
-  const variant = Number(block.props.variant || 1);
+export const PgProjectCycleBlock: React.FC<BlockComponentProps> = ({ block, selected, onChange, activeTemplate }) => {
+  const variant = getActiveVariant(block, activeTemplate);
 
   const getCycleTitle = (v: number) => {
     switch (v) {

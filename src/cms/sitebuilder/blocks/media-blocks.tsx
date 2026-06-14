@@ -5,18 +5,30 @@ import { resolveProp, getBlockStyle } from './pg-blocks';
 import { vTheme, VSection, VKicker } from './variant-kit';
 import type { BlockComponentProps } from '../types';
 
+// Helper to determine active variant based on block props or activeTemplate
+const getActiveVariant = (block: any, activeTemplate?: string): number => {
+  if (block.props.variant !== undefined) return Number(block.props.variant);
+  const templateIndexMap: Record<string, number> = {
+    default: 1, agri: 2, ev: 3, microgrid: 4, pioneer: 5, hydrogen: 6, bess: 7,
+    corporate_a: 8, corporate_b: 9, corporate_c: 10, corporate_d: 11, corporate_e: 12
+  };
+  return templateIndexMap[activeTemplate || 'default'] || 1;
+};
+
 // Helper to get Map Content by Variant
 const getMapVariantContent = (v: number) => {
   switch (v) {
-    case 2: return { tag: 'SYSTEM MONITOR', title: 'Operational Solar Assets Live Telemetry Map', text: 'Real-time performance index, local temperature readings, and GWh capacity dispatch logs.' };
-    case 3: return { tag: 'CHEM-GRID NODES', title: 'Green Hydrogen Hub Distribution Network', text: 'Mapping dedicated clean solar arrays integrated with active water splitting electrolyzers.' };
-    case 4: return { tag: 'STORAGE STATIONS', title: 'Substation Storage Grid Integration Map', text: 'Active BESS locations buffering heavy load distributions and frequency response grids.' };
-    case 5: return { tag: 'COMMUNITY NETWORK', title: 'Rural Microgrid Connections Coverage', text: 'Prepaid smart GSM grids powering community assets, clinics, and clean water wells.' };
-    case 6: return { tag: 'AGRO-ENERGY MAP', title: 'Agrophotovoltaic Irrigation Farm Systems', text: 'Distribution of raised solar arrays co-generating crops and powering agricultural pumps.' };
-    case 7: return { tag: 'SMART MUNICIPALITIES', title: 'Municipal Carbon Offset City Network', text: 'Mapping public structures, transit lines, and EV charge bays linked to net-zero municipal budgets.' };
-    case 8: return { tag: 'CO-GEN NODES', title: 'Hybrid Wind & Solar Cogeneration Map', text: 'Integrated power plants combining wind capture speeds and solar tracker panels.' };
-    case 9: return { tag: 'FINANCIAL ASSETS', title: 'DFI PPA Project Platform Portfolios', text: 'Geographic distribution of yield assets backed by institutional development equity.' };
-    case 10: return { tag: 'MOBILE FIELD UNITS', title: 'Dispatched Containerized Mobile Solar Cubes', text: 'Active tracking of satellite connected offgrid power enclosures in remote sites.' };
+    case 2: return { tag: 'AGRO-ENERGY MAP', title: 'Agrophotovoltaic Irrigation Farm Systems', text: 'Distribution of raised solar arrays co-generating crops and powering agricultural pumps.' };
+    case 3: return { tag: 'SMART MUNICIPALITIES', title: 'Municipal Carbon Offset City Network', text: 'Mapping public structures, transit lines, and EV charge bays linked to net-zero municipal budgets.' };
+    case 4: return { tag: 'COMMUNITY NETWORK', title: 'Rural Microgrid Connections Coverage', text: 'Prepaid smart GSM grids powering community assets, clinics, and clean water wells.' };
+    case 5: return { tag: 'MOBILE FIELD UNITS', title: 'Dispatched Containerized Mobile Solar Cubes', text: 'Active tracking of satellite connected offgrid power enclosures in remote sites.' };
+    case 6: return { tag: 'CHEM-GRID NODES', title: 'Green Hydrogen Hub Distribution Network', text: 'Mapping dedicated clean solar arrays integrated with active water splitting electrolyzers.' };
+    case 7: return { tag: 'STORAGE STATIONS', title: 'Substation Storage Grid Integration Map', text: 'Active BESS locations buffering heavy load distributions and frequency response grids.' };
+    case 8: return { tag: 'INDUSTRIAL SCALE', title: 'C&I Installation Footprint', text: 'Geographic distribution of factory and commercial rooftop solar projects.' };
+    case 9: return { tag: 'UTILITY SCALE', title: 'Wholesale Solar Park Network', text: 'Mapping megawatt-scale solar farms connected directly to national grid substations.' };
+    case 10: return { tag: 'REMOTE COMMUNITIES', title: 'Off-grid Mini-grid Connectivity Map', text: 'Interactive map of isolated communities powered by our prepaid utility networks.' };
+    case 11: return { tag: 'ENERGY TRANSITION', title: 'Corporate Decarbonization Assets', text: 'Virtual PPA project locations supplying verified clean energy attributes to corporate off-takers.' };
+    case 12: return { tag: 'INNOVATION HUB', title: 'Advanced Hybrid System Topology', text: 'Real-time telemetry map of complex hybrid microgrids featuring AI dispatch and grid-forming capabilities.' };
     default: return { tag: 'OUR PRESENCE', title: 'Global Operational Footprint', text: 'Explore our clean energy projects across sub-Saharan Africa.' };
   }
 };
@@ -24,15 +36,17 @@ const getMapVariantContent = (v: number) => {
 // Helper to get Video Content by Variant
 const getVideoVariantContent = (v: number) => {
   switch (v) {
-    case 2: return { tag: 'MONITORING FOOTAGE', title: 'Megawatt Operations Live Feeds', text: 'Watch our remote telemetry center coordinate power distribution streams.', img: '/images/hero_home.png' };
-    case 3: return { tag: 'CHEM-TECH PROOF', title: 'Water Electrolysis Generation Run', text: 'Documenting the chemical gas splitting process under solar power currents.', img: '/images/hero_minigrids.png' };
-    case 4: return { tag: 'STRESS TEST DEMO', title: 'BESS Container High Load Testing', text: 'Simulating subgrid load spike responses using modular lithium storage packs.', img: '/images/hero_about.png' };
-    case 5: return { tag: 'COMMUNITY IMPACT', title: 'First Power: Prepaid Microgrid Startup', text: 'Capturing the moment a remote village gets automated GSM power meters activated.', img: '/images/project_school.png' };
-    case 6: return { tag: 'AGRO-PV FOOTAGE', title: 'Raised Solar Panels Farms Harvest', text: 'Video coverage of high tracker arrays shading crops during peak moisture hours.', img: '/images/project_toto.png' };
-    case 7: return { tag: 'NET-ZERO ACTION', title: 'Municipal EV Public Transit Loop', text: 'Recording transit vehicles charging at smart municipal solar fields.', img: '/images/project_metro_grid.png' };
-    case 8: return { tag: 'WIND-SOLAR MIXER', title: 'Hybrid Turbine Co-generation Run', text: 'Tracking power outputs as wind gusts balance solar array drops.', img: '/images/hero_services.png' };
-    case 9: return { tag: 'FINANCIAL COMPLIANCE', title: 'PPA Platform Financial Closures', text: 'Sign-off and auditing session of revolving equity solar pipelines.', img: '/images/hero_home.png' };
-    case 10: return { tag: 'SPEED RUN LOG', title: '2-Hour Microgrid Container Deploy', text: 'Time-lapse of mobile container deployment at a remote border post.', img: '/images/hero_ci_services.png' };
+    case 2: return { tag: 'AGRO-PV FOOTAGE', title: 'Raised Solar Panels Farms Harvest', text: 'Video coverage of high tracker arrays shading crops during peak moisture hours.', img: '/images/project_toto.png' };
+    case 3: return { tag: 'NET-ZERO ACTION', title: 'Municipal EV Public Transit Loop', text: 'Recording transit vehicles charging at smart municipal solar fields.', img: '/images/project_metro_grid.png' };
+    case 4: return { tag: 'COMMUNITY IMPACT', title: 'Prepaid Microgrid Startup', text: 'Capturing the moment a remote village gets automated GSM power meters activated.', img: '/images/project_school.png' };
+    case 5: return { tag: 'SPEED RUN LOG', title: '2-Hour Microgrid Container Deploy', text: 'Time-lapse of mobile container deployment at a remote border post.', img: '/images/hero_ci_services.png' };
+    case 6: return { tag: 'CHEM-TECH PROOF', title: 'Water Electrolysis Generation Run', text: 'Documenting the chemical gas splitting process under solar power currents.', img: '/images/hero_minigrids.png' };
+    case 7: return { tag: 'STRESS TEST DEMO', title: 'BESS Container High Load Testing', text: 'Simulating subgrid load spike responses using modular lithium storage packs.', img: '/images/hero_about.png' };
+    case 8: return { tag: 'INDUSTRIAL SCALE', title: 'C&I Installation Timelapse', text: 'Watch a commercial rooftop array being deployed from initial safety briefing to final grid connection.', img: '/images/hero_services.png' };
+    case 9: return { tag: 'UTILITY SCALE', title: 'Megawatt Solar Park Flyover', text: 'Aerial drone footage showcasing the scale of our utility-connected solar installations.', img: '/images/hero_projects.png' };
+    case 10: return { tag: 'REMOTE COMMUNITIES', title: 'Mini-grid Commissioning Ceremony', text: 'Experience the impact as a remote community is connected to reliable power for the first time.', img: '/images/hero_home.png' };
+    case 11: return { tag: 'ENERGY TRANSITION', title: 'Corporate PPA Signing & Groundbreaking', text: 'Highlights from the launch of a dedicated off-site corporate decarbonization project.', img: '/images/hero_ci_services.png' };
+    case 12: return { tag: 'INNOVATION HUB', title: 'Hybrid System Operation Dashboard', text: 'A technical walkthrough of our AI-driven dispatch system managing multiple generation sources.', img: '/images/project_css_farms.png' };
     default: return { tag: 'SEE OUR IMPACT', title: 'Powering Progress In Real Time', text: 'Watch how our solar and storage installations drive industrial output and community development.', img: '/images/hero_home.png' };
   }
 };
@@ -40,8 +54,8 @@ const getVideoVariantContent = (v: number) => {
 // ----------------------------------------------------
 // BLOCK 1: PgInteractiveMapBlock
 // ----------------------------------------------------
-export const PgInteractiveMapBlock: React.FC<BlockComponentProps> = ({ block, onChange, selected }) => {
-  const variant = Number(block.props.variant || 1);
+export const PgInteractiveMapBlock: React.FC<BlockComponentProps> = ({ block, onChange, selected, activeTemplate }) => {
+  const variant = getActiveVariant(block, activeTemplate);
   const vData = getMapVariantContent(variant);
 
   const tag = resolveProp(block.props, 'tag', vData.tag);
@@ -429,9 +443,9 @@ export const PgInteractiveMapBlock: React.FC<BlockComponentProps> = ({ block, on
 // ----------------------------------------------------
 // BLOCK 2: PgVideoBlock
 // ----------------------------------------------------
-export const PgVideoBlock: React.FC<BlockComponentProps> = ({ block, onChange, selected }) => {
+export const PgVideoBlock: React.FC<BlockComponentProps> = ({ block, onChange, selected, activeTemplate }) => {
   const [isPlaying, setIsPlaying] = useState(false);
-  const variant = Number(block.props.variant || 1);
+  const variant = getActiveVariant(block, activeTemplate);
   const vData = getVideoVariantContent(variant);
 
   const tag = resolveProp(block.props, 'tag', vData.tag);
@@ -854,19 +868,21 @@ export const PgVideoBlock: React.FC<BlockComponentProps> = ({ block, onChange, s
 // ----------------------------------------------------
 // BLOCK 3: PgPartnersMarqueeBlock
 // ----------------------------------------------------
-export const PgPartnersMarqueeBlock: React.FC<BlockComponentProps> = ({ block, selected }) => {
-  const variant = Number(block?.props?.variant || 1);
+export const PgPartnersMarqueeBlock: React.FC<BlockComponentProps> = ({ block, selected, activeTemplate }) => {
+  const variant = getActiveVariant(block, activeTemplate);
   const partnersMap: Record<number, string[]> = {
     1: ['ACCENTURE', 'CAMCO', 'EEP AFRICA', 'ENGIE', 'INFRACO', 'EDFI', 'PHILIPS', 'UNOPS', 'USAID'],
-    2: ['UTILITY_CORP', 'SOLAR_SYS', 'METRIC_MONITOR', 'MONITORING_PLUS', 'GRID_FLOW', 'DATA_STREAM'],
-    3: ['HYDROGEN_TECH', 'GAS_PURE', 'ELECTROLYSIS_INT', 'ANODE_SYSTEMS', 'COMPRESSOR_SYS', 'CHEM_INFRA'],
-    4: ['LITHIUM_GRID', 'BESS_SOLUTIONS', 'SUBSTATION_ENG', 'BATTERY_TECH', 'CHARGE_CYCLE', 'LFP_ASSETS'],
-    5: ['USAID', 'UNOPS', 'COMMUNITY_FIRST', 'PREPAY_LOG', 'GSM_GRID', 'DEVELOPMENT_BANK'],
-    6: ['ECO_AGRI', 'GREEN_FARMS', 'AGRO_PUMP', 'COLD_RESERVE', 'MOISTURE_LOG', 'FOOD_SECURITY'],
-    7: ['CITY_GRID', 'EV_CHARGE', 'CO2_OFFSET', 'METRO_POWER', 'COUNCIL_ALLIANCE', 'GREEN_METROPOLIS'],
-    8: ['WIND_TURBINES', 'SOLAR_COGEN', 'FUEL_SAVER', 'HYBRID_SYSTEMS', 'GRID_STABILIZER', 'MIXER_TECH'],
-    9: ['DFI_FINANCE', 'ESG_COMPLIANT', 'GLOBAL_TRUST', 'YIELD_FOUNDATION', 'PPA_PORTFOLIO', 'MILTON_CAPITAL'],
-    10: ['RAPID_CUBE', 'REMOTE_OPERATIONS', 'FIELD_GRID', 'MOBILE_MODULES', 'SATCOM_RELAY', 'LOGISTICS_ENG']
+    2: ['ECO_AGRI', 'GREEN_FARMS', 'AGRO_PUMP', 'COLD_RESERVE', 'MOISTURE_LOG', 'FOOD_SECURITY'],
+    3: ['CITY_GRID', 'EV_CHARGE', 'CO2_OFFSET', 'METRO_POWER', 'COUNCIL_ALLIANCE', 'GREEN_METROPOLIS'],
+    4: ['USAID', 'UNOPS', 'COMMUNITY_FIRST', 'PREPAY_LOG', 'GSM_GRID', 'DEVELOPMENT_BANK'],
+    5: ['RAPID_CUBE', 'REMOTE_OPERATIONS', 'FIELD_GRID', 'MOBILE_MODULES', 'SATCOM_RELAY', 'LOGISTICS_ENG'],
+    6: ['HYDROGEN_TECH', 'GAS_PURE', 'ELECTROLYSIS_INT', 'ANODE_SYSTEMS', 'COMPRESSOR_SYS', 'CHEM_INFRA'],
+    7: ['LITHIUM_GRID', 'BESS_SOLUTIONS', 'SUBSTATION_ENG', 'BATTERY_TECH', 'CHARGE_CYCLE', 'LFP_ASSETS'],
+    8: ['UTILITY_CORP', 'SOLAR_SYS', 'METRIC_MONITOR', 'MONITORING_PLUS', 'GRID_FLOW', 'DATA_STREAM'],
+    9: ['WIND_TURBINES', 'SOLAR_COGEN', 'FUEL_SAVER', 'HYBRID_SYSTEMS', 'GRID_STABILIZER', 'MIXER_TECH'],
+    10: ['DFI_FINANCE', 'ESG_COMPLIANT', 'GLOBAL_TRUST', 'YIELD_FOUNDATION', 'PPA_PORTFOLIO', 'MILTON_CAPITAL'],
+    11: ['RE100', 'CARBON_TRUST', 'SBTi', 'VIRTUAL_PPA', 'CLIMATE_GROUP', 'NET_ZERO_ALLIANCE'],
+    12: ['AI_DISPATCH', 'SMART_GRID_LABS', 'HYBRID_INNOVATION', 'TECH_PIONEERS', 'GRID_FORMING', 'SYSTEMS_INT']
   };
 
   const partners = partnersMap[variant] || partnersMap[1];
