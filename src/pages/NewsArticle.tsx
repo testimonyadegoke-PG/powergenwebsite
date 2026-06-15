@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useCms } from '../cms/useCms';
 import { Seo } from '../components/Seo';
@@ -6,15 +6,18 @@ import { Seo } from '../components/Seo';
 export const NewsArticle: React.FC = () => {
   const { content } = useCms();
   const { id } = useParams<{ id: string }>();
-  const [scrollProgress, setScrollProgress] = useState(0);
+  const progressBarRef = useRef<HTMLDivElement>(null);
   const article = content.news.find((item) => item.id === id);
 
   useEffect(() => {
     const handleScroll = () => {
       const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
-      if (totalScroll > 0) setScrollProgress((window.scrollY / totalScroll) * 100);
+      if (progressBarRef.current && totalScroll > 0) {
+        const progress = (window.scrollY / totalScroll) * 100;
+        progressBarRef.current.style.width = `${progress}%`;
+      }
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -51,11 +54,12 @@ export const NewsArticle: React.FC = () => {
         }}
       />
       <div
+        ref={progressBarRef}
         style={{
           position: 'fixed',
           top: '80px',
           left: 0,
-          width: `${scrollProgress}%`,
+          width: '0%',
           height: '4px',
           backgroundColor: 'var(--accent-green)',
           zIndex: 1010,

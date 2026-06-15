@@ -9,8 +9,11 @@ export const Header: React.FC = () => {
   const { content } = useCms();
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener('scroll', handleScroll);
+    const handleScroll = () => {
+      const isScrolled = window.scrollY > 50;
+      setScrolled((prev) => (prev !== isScrolled ? isScrolled : prev));
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 

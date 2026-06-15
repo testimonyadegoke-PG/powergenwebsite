@@ -37,61 +37,61 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
       '.text-link',
     ];
 
-    const activeMagnetics = new Set<HTMLElement>();
+    const buttons = document.querySelectorAll<HTMLElement>(selectors.join(', '));
+    const cleanups: Array<() => void> = [];
 
-    const onGlobalMouseMove = (e: MouseEvent) => {
-      const buttons = document.querySelectorAll<HTMLElement>(selectors.join(', '));
+    buttons.forEach((btn) => {
+      // Ensure display is set to inline-block for inline elements so transform works
+      if (window.getComputedStyle(btn).display === 'inline') {
+        btn.style.display = 'inline-block';
+      }
 
-      buttons.forEach(btn => {
-        const rect = btn.getBoundingClientRect();
+      // Cache bounding rect on enter to avoid layout thrashing on mousemove
+      let rect = btn.getBoundingClientRect();
+      const updateRect = () => {
+        rect = btn.getBoundingClientRect();
+      };
+
+      const handleMouseMove = (e: MouseEvent) => {
         const btnX = rect.left + rect.width / 2;
         const btnY = rect.top + rect.height / 2;
-
         const dx = e.clientX - btnX;
         const dy = e.clientY - btnY;
-        const distance = Math.hypot(dx, dy);
 
-        const radius = Math.max(rect.width, rect.height) * 0.8 + 20;
+        gsap.to(btn, {
+          x: dx * 0.25,
+          y: dy * 0.25,
+          duration: 0.3,
+          ease: 'power2.out',
+          overwrite: 'auto',
+        });
+      };
 
-        if (distance < radius) {
-          activeMagnetics.add(btn);
-          if (window.getComputedStyle(btn).display === 'inline') {
-            btn.style.display = 'inline-block';
-          }
+      const handleMouseLeave = () => {
+        gsap.to(btn, {
+          x: 0,
+          y: 0,
+          duration: 0.6,
+          ease: 'elastic.out(1.1, 0.4)',
+          overwrite: 'auto',
+        });
+      };
 
-          gsap.to(btn, {
-            x: dx * 0.2,
-            y: dy * 0.2,
-            duration: 0.3,
-            ease: 'power2.out',
-            overwrite: 'auto',
-          });
-        } else if (activeMagnetics.has(btn)) {
-          activeMagnetics.delete(btn);
-          gsap.to(btn, {
-            x: 0,
-            y: 0,
-            duration: 0.6,
-            ease: 'elastic.out(1.1, 0.4)',
-            overwrite: 'auto',
-          });
-        }
-      });
+      btn.addEventListener('mouseenter', updateRect, { passive: true });
+      btn.addEventListener('mousemove', handleMouseMove, { passive: true });
+      btn.addEventListener('mouseleave', handleMouseLeave, { passive: true });
 
-      activeMagnetics.forEach(btn => {
-        if (!document.body.contains(btn)) activeMagnetics.delete(btn);
-      });
-    };
-
-    window.addEventListener('mousemove', onGlobalMouseMove);
-
-    return () => {
-      window.removeEventListener('mousemove', onGlobalMouseMove);
-      const buttons = document.querySelectorAll<HTMLElement>(selectors.join(', '));
-      buttons.forEach(btn => {
+      cleanups.push(() => {
+        btn.removeEventListener('mouseenter', updateRect);
+        btn.removeEventListener('mousemove', handleMouseMove);
+        btn.removeEventListener('mouseleave', handleMouseLeave);
         gsap.killTweensOf(btn);
         btn.style.transform = '';
       });
+    });
+
+    return () => {
+      cleanups.forEach((cleanup) => cleanup());
     };
   }, [pathname, isAdmin, prefersReducedMotion]);
 
